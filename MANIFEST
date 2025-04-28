@@ -1,0 +1,13 @@
+.emacs|symlink|
+.emacs.rc|symlink|
+.emacs.snippets|symlink|
+.emacs.local|symlink|
+.emacs.custom.el|symlink|
+.gitconfig|symlink|
+#.markut|symlink|
+#.rexim|symlink|
+#.npmrc|symlink|
+#.jmacsrc|symlink|
+#.apvlvrc|symlink|
+#.nexrc|symlink|
+#.sqliterc|symlink|

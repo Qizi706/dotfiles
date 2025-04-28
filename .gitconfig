@@ -1,0 +1,9 @@
+[user]
+	email = qizi0706@gmail.com
+	name = qizi
+[merge]
+	conflictStyle = diff3
+[magit]
+	hideCampaign = true
+[init]
+	defaultBranch = main

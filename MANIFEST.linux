@@ -1,0 +1,11 @@
+.zshrc|symlink|
+.Xresources|symlink|
+.tmux.conf|symlink|
+.vimrc|symlink|
+i3|symlink|.config
+.i3status.conf|symlink|
+#.screenlayout|symlink|
+#.ghci|symlink|
+#bin/hhkb-i3|symlink|
+#bin/map-wacom|symlink|
+#mpv.conf|symlink|.config/mpv
