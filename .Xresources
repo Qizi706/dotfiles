@@ -2,3 +2,7 @@ Xft.dpi: 	144
 Xft.antialias:  1
 Xft.hinting:    1
 Xft.hintstyle:  hintmedium
+
+Xcursor.theme: Adwaita
+Xcursor.size: 32
+
