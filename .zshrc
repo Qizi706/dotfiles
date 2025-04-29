@@ -112,3 +112,4 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR="vim"
 export VISUAL="$EDITOR"
 
+source $HOME/Programming/qizi/dotfiles/PATH.sh
