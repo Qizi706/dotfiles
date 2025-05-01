@@ -111,3 +111,5 @@ source $ZSH/oh-my-zsh.sh
 
 export EDITOR="vim"
 export VISUAL="$EDITOR"
+
+# eval "$(starship init zsh)"

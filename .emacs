@@ -1,17 +1,15 @@
-(package-initialize)
-
 (setq custom-file "~/.emacs.custom.el")
 (load-file "~/.emacs.rc/rc.el")
 
 ;; basic config
-(add-to-list 'default-frame-alist `(font . "Iosevka-14"))
+(add-to-list 'default-frame-alist `(font . "IosevkaNerdFont-14"))
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
 (column-number-mode 1)
 (show-paren-mode 0)
 (global-display-line-numbers-mode)
-(rc/require-theme 'gruber-darker)
+;; (rc/require-theme 'gruber-darker)
 
 
 ;; set encode format
@@ -43,17 +41,24 @@
 
 
 ;; use package
-;; (rc/require 'use-package)
-;; (setq use-package-always-ensure t
-;;       use-package-always-defer t
-;;       use-package-enable-imenu-support t
-;;       use-package-expand-minimally t)
-;; 
-;; ;; company config
-;; (rc/require 'company)
-;; (use-package company
-;;   :hook (after-init . global-company-mode)
-;;   :config (setq company-minimum-prefix-length 1
-;;                 company-show-quick-access t))
+(require 'package)
+(unless (bound-and-true-p package--initialized)
+  (package-initialize))
+
+(unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+;; gruber-darker-theme
+(use-package gruber-darker-theme
+  :ensure t
+  :config
+  (load-theme 'gruber-darker t))
+
+;; expand-region
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
+
 
 (load custom-file 'noerror)

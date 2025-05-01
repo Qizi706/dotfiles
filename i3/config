@@ -9,12 +9,6 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-# autostart
-exec_always --no-startup-id "feh --bg-fill --randomize /home/qzhou/Pictures/Wallpapers/*"
-exec_always --no-startup-id "picom -b"
-exec_always --no-startup-id "fcitx5 -d"
-exec_always --no-startup-id "~/.screenlayout/portable-setup.sh"
-exec_always --no-startup-id "dunst"
 
 set $mod Mod4
 
@@ -26,7 +20,7 @@ set $mod Mod4
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
 
-font pango:Iosevka 8
+font pango:IosevkaNerdFont 8
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -47,6 +41,17 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+
+
+# autostart
+#exec --no-startup-id xset s off
+#exec --no-startup-id xset s noblank
+#exec --no-startup-id xset -dpms
+exec_always --no-startup-id "feh --bg-fill --randomize /home/qzhou/Pictures/Wallpapers/*"
+exec_always --no-startup-id "xcompmgr -c &"
+exec_always --no-startup-id "fcitx5 -d"
+exec_always --no-startup-id "~/.screenlayout/portable-setup.sh"
+exec_always --no-startup-id "dunst"
 
 # xbacklight controls
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10
@@ -114,7 +119,7 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+f floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -235,8 +240,11 @@ hide_edge_borders both
 for_window [class="wechat"] floating enable
 for_window [class="obs"] floating enable
 for_window [class="overskride"] floating enable
+for_window [class="mihomo-party"] floating enable
+
 
 # Automatically puts clinets on specific workspaces
 assign [class="Google-chrome"] 2
-assign [class="Clash-verge"] 4
 assign [class="wechat"] 3
+assign [class="Clash-verge"] 4
+assign [class="mihomo-party"] 4

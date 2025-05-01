@@ -26,4 +26,4 @@ autocmd BufNewFile,BufRead ?\+.c3 setf c
 
 map gf :e <cfile><CR>
 
-set clipboard=unnamedplus
+set clipboard=unnamed,unnamedplus
