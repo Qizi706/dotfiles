@@ -1,4 +1,6 @@
 .zshrc|symlink|
+.oh-my-zsh/themes/ps.zsh-theme|symlink|.oh-my-zsh/themes
+.screenlayout|symlink|
 .Xresources|symlink|
 .tmux.conf|symlink|
 .vimrc|symlink|
