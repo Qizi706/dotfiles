@@ -1,4 +1,27 @@
 (setq custom-file "~/.emacs.custom.el")
+
+
+;; use package
+(require 'package)
+(unless (bound-and-true-p package--initialized)
+  (package-initialize))
+
+(unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+;; gruber-darker-theme
+(use-package gruber-darker-theme
+  :ensure t
+  :config
+  (load-theme 'gruber-darker t))
+
+;; expand-region
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
+
+
 (load-file "~/.emacs.rc/rc.el")
 
 ;; basic config
@@ -38,27 +61,6 @@
 (global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
 (global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
 (global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
-
-
-;; use package
-(require 'package)
-(unless (bound-and-true-p package--initialized)
-  (package-initialize))
-
-(unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-
-;; gruber-darker-theme
-(use-package gruber-darker-theme
-  :ensure t
-  :config
-  (load-theme 'gruber-darker t))
-
-;; expand-region
-(use-package expand-region
-  :ensure t
-  :bind ("C-=" . er/expand-region))
 
 
 (load custom-file 'noerror)
