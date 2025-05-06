@@ -113,3 +113,4 @@ export EDITOR="vim"
 export VISUAL="$EDITOR"
 
 # eval "$(starship init zsh)"
+export EDITOR="emacs"
