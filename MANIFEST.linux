@@ -4,9 +4,11 @@
 .Xresources|symlink|
 .tmux.conf|symlink|
 .vimrc|symlink|
+nvim|symlink|.config
 i3|symlink|.config
 .i3status.conf|symlink|
 alacritty.toml|symlink|.config/alacritty
+picom|symlink|.config
 #.screenlayout|symlink|
 #.ghci|symlink|
 #bin/hhkb-i3|symlink|

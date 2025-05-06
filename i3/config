@@ -44,10 +44,8 @@ exec --no-startup-id "blueberry-tray &"
 exec --no-startup-id "mihomo-party"
 
 # autostart
-#exec --no-startup-id xset s off
-#exec --no-startup-id xset s noblank
-#exec --no-startup-id xset -dpms
 exec --no-startup-id "~/.screenlayout/portable-setup.sh"
+exec --no-startup-id "picom --no-fading-openclose -b"
 exec_always --no-startup-id "feh --bg-fill --randomize /home/qzhou/Pictures/Wallpapers/*"
 exec_always --no-startup-id "fcitx5 -d"
 exec_always --no-startup-id "dunst"
