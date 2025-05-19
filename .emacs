@@ -21,6 +21,41 @@
   :ensure t
   :bind ("C-=" . er/expand-region))
 
+;; markdown
+(use-package markdown-mode
+  :ensure t)
+
+;; smartparens
+(use-package smartparens
+  :ensure t
+  :hook (prog-mode . smartparens-mode)
+  :config
+  (require 'smartparens-config))
+
+;; highlighting-parentheses
+(use-package highlight-parentheses
+  :ensure t
+  :hook (prog-mode . highlight-parentheses-mode))
+
+;; conda.el
+(use-package conda
+  :ensure t
+  :init
+  ;; set path/to/conda
+  (setq conda-anaconda-home (expand-file-name "~/Programming/Env/miniconda3"))
+  (setq conda-env-home-directory conda-anaconda-home)
+  :config
+  (conda-env-initialize-interactive-shells)
+  (conda-env-initialize-eshell)
+  ;; if using lsp-mode, also initialize it
+  (conda-env-autoactivate-mode t))
+
+;; projectfile
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-mode 1))
+
 
 (load-file "~/.emacs.rc/rc.el")
 
@@ -30,7 +65,7 @@
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
 (column-number-mode 1)
-(show-paren-mode 0)
+(show-paren-mode 1)
 (global-display-line-numbers-mode)
 ;; (rc/require-theme 'gruber-darker)
 

@@ -9,7 +9,10 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(make-backup-files nil)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(conda dash-functional expand-region format-all gruber-darker-theme
+           highlight-parentheses markdown-mode multiple-cursors
+           projectile smartparens smex))
  '(tab-width 4)
  '(warning-minimum-level :error))
 (custom-set-faces
