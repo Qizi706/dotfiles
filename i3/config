@@ -230,8 +230,8 @@ bindsym $mod+r mode "resize"
     assign [class="bilibili"] 2
     assign [class="mihomo-party"] 4
 
-    # Screenshots
-    #bindsym $mod+s exec --no-startup-id maim -s ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png
-    bindsym $mod+Shift+s exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
+    # Screenshots use maim
+    bindsym $mod+p exec --no-startup-id maim -s ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png
+    bindsym $mod+Shift+p exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
 #
 ### End
