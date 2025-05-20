@@ -142,7 +142,7 @@ exec_always --no-startup-id "dunst"
     bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
-    #bindsym $mod+s layout stacking
+    bindsym $mod+s layout stacking
     bindsym $mod+w layout tabbed
     bindsym $mod+e layout toggle split
     
@@ -199,7 +199,7 @@ bindsym $mod+r mode "resize"
     bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 
     bindsym $mod+b exec --no-startup-id "boomer"
-    bindsym --release $mod+Shift+l exec $Locker
+    bindsym --release $mod+Shift+semicolon exec $Locker
 
 
     # Start i3bar to display a workspace bar (plus the system information i3status
@@ -231,7 +231,7 @@ bindsym $mod+r mode "resize"
     assign [class="mihomo-party"] 4
 
     # Screenshots
-    bindsym $mod+s exec --no-startup-id maim -s ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png
+    #bindsym $mod+s exec --no-startup-id maim -s ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png
     bindsym $mod+Shift+s exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
 #
 ### End
