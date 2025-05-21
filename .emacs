@@ -56,6 +56,16 @@
   :config
   (projectile-mode 1))
 
+;; python elpy
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
+(add-hook 'elpy-mode-hook (lambda ()
+                            (highlight-indentation-mode -1)
+                            (highlight-indentation-current-column-mode -1)))
+(setq elpy-rpc-python-command "~/Programming/Env/miniconda3/envs/cs61a/bin/python")
+
 
 (load-file "~/.emacs.rc/rc.el")
 
