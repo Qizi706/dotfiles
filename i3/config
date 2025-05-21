@@ -28,6 +28,12 @@ font pango:IosevkaNerdFont 10
 exec --no-startup-id dex --autostart --environment i3
 
 exec --no-startup-id xss-lock --transfer-sleep-lock -- slock
+
+# Do not sleep without operating after long time
+exec --no-startup-id xset s off
+exec --no-startup-id xset -dpms
+exec --no-startup-id xset s noblank
+
 exec --no-startup-id nm-applet
 exec --no-startup-id "blueberry-tray &"
 exec --no-startup-id "mihomo-party"
