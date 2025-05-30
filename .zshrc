@@ -113,7 +113,6 @@ export EDITOR="vim"
 export VISUAL="$EDITOR"
 
 # eval "$(starship init zsh)"
-export EDITOR="emacs"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
