@@ -197,7 +197,7 @@ bindsym $mod+r mode "resize"
     # Pulse Audio controls
     bindsym XF86AudioRaiseVolume exec "amixer -q sset Master 5%+ unmute"
     bindsym XF86AudioLowerVolume exec "amixer -q sset Master 5%- unmute"
-    bindsym XF86AudioMute exec "amixer -q sset Master,0 toggle"
+    bindsym XF86AudioMute exec "amixer -q sset Master toggle"
     bindsym XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
 
     # Special keys to adjust brightness via brightnessctl
