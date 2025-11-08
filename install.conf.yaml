@@ -14,5 +14,6 @@
     ~/.local/bin: local/bin
     /etc/pacman.conf: etc/pacman.conf
     /etc/libvirt: etc/libvirt
+    /etc/pacman.d: etc/pacman.d
 
 
