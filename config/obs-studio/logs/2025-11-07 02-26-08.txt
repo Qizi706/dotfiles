@@ -1,0 +1,132 @@
+02:26:08.488: Platform: Wayland
+02:26:08.488: CPU Name: AMD Ryzen 7 9700X 8-Core Processor
+02:26:08.488: CPU Speed: 5489.557MHz
+02:26:08.488: Physical Cores: 8, Logical Cores: 16
+02:26:08.488: Physical Memory: 31181MB Total, 1583MB Free
+02:26:08.488: Kernel Version: Linux 6.17.4-arch2-1
+02:26:08.488: Distribution: "Arch Linux" Unknown
+02:26:08.488: Desktop Environment: Hyprland
+02:26:08.488: Session Type: wayland
+02:26:08.489: Current Date/Time: 2025-11-07, 02:26:08 AM
+02:26:08.489: Browser Hardware Acceleration: true
+02:26:08.489: Qt Version: 6.10.0 (runtime), 6.10.0 (compiled)
+02:26:08.489: Portable mode: false
+02:26:08.517: OBS 32.0.2-8-ge448c0a963-modified (linux)
+02:26:08.517: ---------------------------------
+02:26:08.517: ---------------------------------
+02:26:08.517: audio settings reset:
+02:26:08.517: 	samples per sec: 48000
+02:26:08.517: 	speakers:        2
+02:26:08.517: 	max buffering:   960 milliseconds
+02:26:08.517: 	buffering type:  dynamically increasing
+02:26:08.518: ---------------------------------
+02:26:08.518: Initializing OpenGL...
+02:26:08.518: Using EGL/Wayland
+02:26:08.549: Initialized EGL 1.5
+02:26:08.556: Loading up OpenGL on adapter AMD AMD Radeon Graphics (radeonsi, raphael_mendocino, LLVM 21.1.3, DRM 3.64, 6.17.4-arch2-1)
+02:26:08.556: OpenGL loaded successfully, version 4.6 (Core Profile) Mesa 25.2.5-arch1.1, shading language 4.60
+02:26:08.572: ---------------------------------
+02:26:08.572: video settings reset:
+02:26:08.572: 	base resolution:   1920x1080
+02:26:08.572: 	output resolution: 1920x1080
+02:26:08.572: 	downscale filter:  Bicubic
+02:26:08.572: 	fps:               60/1
+02:26:08.572: 	format:            NV12
+02:26:08.572: 	YUV mode:          Rec. 709/Partial
+02:26:08.572: NV12 texture support enabled
+02:26:08.572: P010 texture support not available
+02:26:08.573: Audio monitoring device:
+02:26:08.573: 	name: Default
+02:26:08.573: 	id: default
+02:26:08.574: ---------------------------------
+02:26:08.574: Failed to load 'en-US' text for module: 'decklink-captions.so'
+02:26:08.575: Failed to load 'en-US' text for module: 'decklink-output-ui.so'
+02:26:08.576: A DeckLink iterator could not be created.  The DeckLink drivers may not be installed
+02:26:08.576: Failed to initialize module 'decklink.so'
+02:26:08.627: [pipewire] No capture sources available
+02:26:08.631: v4l2loopback not installed, virtual camera not registered
+02:26:08.639: VAAPI: API version 1.22
+02:26:08.639: FFmpeg VAAPI H264 encoding supported
+02:26:08.641: FFmpeg VAAPI AV1 encoding not supported
+02:26:08.643: FFmpeg VAAPI HEVC encoding supported
+02:26:09.254: [NVENC] Test process failed: cuda_init_100
+02:26:09.254: NVENC not supported
+02:26:09.254: Failed to initialize module 'obs-nvenc.so'
+02:26:09.289: [obs-websocket] [obs_module_load] you can haz websockets (Version: 5.6.3 | RPC Version: 1)
+02:26:09.289: [obs-websocket] [obs_module_load] Qt version (compile-time): 6.10.0 | Qt version (run-time): 6.10.0
+02:26:09.289: [obs-websocket] [obs_module_load] Linked ASIO Version: 103600
+02:26:09.295: [obs-websocket] [obs_module_load] Module loaded.
+02:26:09.297: ---------------------------------
+02:26:09.297:   Loaded Modules:
+02:26:09.297:     text-freetype2.so
+02:26:09.297:     rtmp-services.so
+02:26:09.297:     obs-x264.so
+02:26:09.297:     obs-websocket.so
+02:26:09.297:     obs-webrtc.so
+02:26:09.297:     obs-vst.so
+02:26:09.297:     obs-transitions.so
+02:26:09.297:     obs-qsv11.so
+02:26:09.297:     obs-outputs.so
+02:26:09.297:     obs-libfdk.so
+02:26:09.297:     obs-filters.so
+02:26:09.297:     obs-ffmpeg.so
+02:26:09.297:     linux-v4l2.so
+02:26:09.297:     linux-pulseaudio.so
+02:26:09.297:     linux-pipewire.so
+02:26:09.297:     linux-jack.so
+02:26:09.297:     linux-capture.so
+02:26:09.297:     linux-alsa.so
+02:26:09.297:     image-source.so
+02:26:09.297:     frontend-tools.so
+02:26:09.297:     decklink-output-ui.so
+02:26:09.297:     decklink-captions.so
+02:26:09.297: ---------------------------------
+02:26:09.297: ---------------------------------
+02:26:09.297: Available Encoders:
+02:26:09.297:   Video Encoders:
+02:26:09.297: 	- ffmpeg_svt_av1 (SVT-AV1)
+02:26:09.297: 	- ffmpeg_aom_av1 (AOM AV1)
+02:26:09.297: 	- ffmpeg_vaapi_tex (FFmpeg VAAPI H.264)
+02:26:09.297: 	- hevc_ffmpeg_vaapi_tex (FFmpeg VAAPI HEVC)
+02:26:09.297: 	- obs_x264 (x264)
+02:26:09.297:   Audio Encoders:
+02:26:09.297: 	- ffmpeg_aac (FFmpeg AAC)
+02:26:09.297: 	- ffmpeg_opus (FFmpeg Opus)
+02:26:09.297: 	- ffmpeg_pcm_s16le (FFmpeg PCM (16-bit))
+02:26:09.297: 	- ffmpeg_pcm_s24le (FFmpeg PCM (24-bit))
+02:26:09.297: 	- ffmpeg_pcm_f32le (FFmpeg PCM (32-bit float))
+02:26:09.297: 	- ffmpeg_alac (FFmpeg ALAC (24-bit))
+02:26:09.297: 	- ffmpeg_flac (FFmpeg FLAC (16-bit))
+02:26:09.297: 	- libfdk_aac (libfdk AAC)
+02:26:09.297: ==== Startup complete ===============================================
+02:26:09.307: All scene data cleared
+02:26:09.307: ------------------------------------------------
+02:26:09.310: pulse-input: Server name: 'PulseAudio (on PipeWire 1.4.9) 15.0.0'
+02:26:09.310: pulse-input: Audio format: s16le, 48000 Hz, 2 channels
+02:26:09.310: pulse-input: Started recording from 'alsa_output.usb-HECATE_G35_GAMING_HEADSET_HECATE_G35_GAMING_HEADSET_20250513-00.analog-stereo.monitor' (default)
+02:26:09.310: [Loaded global audio device]: 'Desktop Audio'
+02:26:09.310: pulse-input: Server name: 'PulseAudio (on PipeWire 1.4.9) 15.0.0'
+02:26:09.310: pulse-input: Audio format: s16le, 48000 Hz, 1 channels
+02:26:09.310: pulse-input: Started recording from 'alsa_input.usb-HECATE_G35_GAMING_HEADSET_HECATE_G35_GAMING_HEADSET_20250513-00.mono-fallback' (default)
+02:26:09.310: [Loaded global audio device]: 'Mic/Aux'
+02:26:09.311: Switched to scene 'Scene'
+02:26:09.311: ------------------------------------------------
+02:26:09.311: Loaded scenes:
+02:26:09.311: - scene 'Scene':
+02:26:09.311: ------------------------------------------------
+02:26:09.328: Device for 'Audio Output Capture' source is also used for audio monitoring:
+02:26:09.328: Deduplication logic is being applied to all monitored sources.
+02:26:09.328: 
+02:26:09.883: adding 42 milliseconds of audio buffering, total audio buffering is now 42 milliseconds (source: Desktop Audio)
+02:26:09.883: 
+02:26:14.373: obs-data.c: [obs_data_create_from_json] Failed reading json string (1): '[' or '{' expected near end of file
+02:26:14.378: User added source 'Video Capture Device (PipeWire) (BETA)' (pipewire-camera-source) to scene 'Scene'
+02:26:14.385: virtual void QtWaylandClient::QWaylandTextInputv3::disableSurface(wl_surface*) Try to disable surface 0x55599d41c590 with focusing surface 0x55599f581c30
+02:26:14.386: [camera-portal] Selected format for ''
+02:26:14.386: [camera-portal] selected camera ''
+02:26:14.392: [camera-portal] Successfully accessed cameras
+02:26:14.399: [pipewire] Server version: 1.4.9
+02:26:14.399: [pipewire] Library version: 1.4.9
+02:26:14.399: [pipewire] Header version: 1.4.9
+02:26:14.399: [pipewire] Created registry 0x7f1250002b60
+02:26:22.862: User Removed source 'Video Capture Device (PipeWire) (BETA)' (pipewire-camera-source) from scene 'Scene'

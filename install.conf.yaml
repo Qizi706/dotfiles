@@ -1,3 +1,7 @@
+- defaults:
+    link:
+      relink: true
+
 - clean: ['~']
 
 - link:
@@ -6,5 +10,9 @@
     ~/.bashrc: bashrc
     ~/.zprofile: zprofile
     ~/.zshrc: zshrc
+    ~/.config: config
+    ~/.local/bin: local/bin
+    /etc/pacman.conf: etc/pacman.conf
+    /etc/libvirt: etc/libvirt
 
 

@@ -1,0 +1,10 @@
+{
+  "commandRunner": {
+    "enabled": true,
+    "history": [
+      "wev",
+      "dgop",
+      "ls"
+    ]
+  }
+}

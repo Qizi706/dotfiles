@@ -1,0 +1,227 @@
+02:38:59.809: Platform: Wayland
+02:38:59.810: CPU Name: AMD Ryzen 7 9700X 8-Core Processor
+02:38:59.810: CPU Speed: 4305.517MHz
+02:38:59.810: Physical Cores: 8, Logical Cores: 16
+02:38:59.810: Physical Memory: 31181MB Total, 7840MB Free
+02:38:59.810: Kernel Version: Linux 6.17.4-arch2-1
+02:38:59.810: Distribution: "Arch Linux" Unknown
+02:38:59.810: Desktop Environment: Hyprland
+02:38:59.810: Session Type: wayland
+02:38:59.810: Current Date/Time: 2025-11-07, 02:38:59 AM
+02:38:59.810: Browser Hardware Acceleration: true
+02:38:59.810: Qt Version: 6.10.0 (runtime), 6.10.0 (compiled)
+02:38:59.810: Portable mode: false
+02:38:59.844: OBS 32.0.2-8-ge448c0a963-modified (linux)
+02:38:59.844: ---------------------------------
+02:38:59.844: ---------------------------------
+02:38:59.844: audio settings reset:
+02:38:59.844: 	samples per sec: 48000
+02:38:59.844: 	speakers:        2
+02:38:59.844: 	max buffering:   960 milliseconds
+02:38:59.844: 	buffering type:  dynamically increasing
+02:38:59.845: ---------------------------------
+02:38:59.845: Initializing OpenGL...
+02:38:59.845: Using EGL/Wayland
+02:38:59.877: Initialized EGL 1.5
+02:38:59.885: Loading up OpenGL on adapter AMD AMD Radeon Graphics (radeonsi, raphael_mendocino, LLVM 21.1.3, DRM 3.64, 6.17.4-arch2-1)
+02:38:59.885: OpenGL loaded successfully, version 4.6 (Core Profile) Mesa 25.2.5-arch1.1, shading language 4.60
+02:38:59.904: ---------------------------------
+02:38:59.904: video settings reset:
+02:38:59.904: 	base resolution:   1920x1080
+02:38:59.904: 	output resolution: 1920x1080
+02:38:59.904: 	downscale filter:  Bicubic
+02:38:59.904: 	fps:               60/1
+02:38:59.904: 	format:            NV12
+02:38:59.904: 	YUV mode:          Rec. 709/Partial
+02:38:59.904: NV12 texture support enabled
+02:38:59.904: P010 texture support not available
+02:38:59.906: Audio monitoring device:
+02:38:59.906: 	name: Default
+02:38:59.906: 	id: default
+02:38:59.906: ---------------------------------
+02:38:59.907: Failed to load 'en-US' text for module: 'decklink-captions.so'
+02:38:59.907: Failed to load 'en-US' text for module: 'decklink-output-ui.so'
+02:38:59.908: A DeckLink iterator could not be created.  The DeckLink drivers may not be installed
+02:38:59.908: Failed to initialize module 'decklink.so'
+02:38:59.964: [pipewire] Available capture sources:
+02:38:59.964: [pipewire]     - Monitor source
+02:38:59.964: [pipewire]     - Window source
+02:38:59.967: v4l2loopback not installed, virtual camera not registered
+02:38:59.974: VAAPI: API version 1.22
+02:38:59.975: FFmpeg VAAPI H264 encoding supported
+02:38:59.977: FFmpeg VAAPI AV1 encoding not supported
+02:38:59.979: FFmpeg VAAPI HEVC encoding supported
+02:39:00.603: [NVENC] Test process failed: cuda_init_100
+02:39:00.603: NVENC not supported
+02:39:00.603: Failed to initialize module 'obs-nvenc.so'
+02:39:00.659: [obs-websocket] [obs_module_load] you can haz websockets (Version: 5.6.3 | RPC Version: 1)
+02:39:00.659: [obs-websocket] [obs_module_load] Qt version (compile-time): 6.10.0 | Qt version (run-time): 6.10.0
+02:39:00.659: [obs-websocket] [obs_module_load] Linked ASIO Version: 103600
+02:39:00.662: [obs-websocket] [obs_module_load] Module loaded.
+02:39:00.664: ---------------------------------
+02:39:00.664:   Loaded Modules:
+02:39:00.664:     text-freetype2.so
+02:39:00.664:     rtmp-services.so
+02:39:00.664:     obs-x264.so
+02:39:00.664:     obs-websocket.so
+02:39:00.664:     obs-webrtc.so
+02:39:00.664:     obs-vst.so
+02:39:00.664:     obs-transitions.so
+02:39:00.664:     obs-qsv11.so
+02:39:00.664:     obs-outputs.so
+02:39:00.664:     obs-libfdk.so
+02:39:00.664:     obs-filters.so
+02:39:00.664:     obs-ffmpeg.so
+02:39:00.664:     linux-v4l2.so
+02:39:00.664:     linux-pulseaudio.so
+02:39:00.664:     linux-pipewire.so
+02:39:00.664:     linux-jack.so
+02:39:00.664:     linux-capture.so
+02:39:00.664:     linux-alsa.so
+02:39:00.664:     image-source.so
+02:39:00.664:     frontend-tools.so
+02:39:00.664:     decklink-output-ui.so
+02:39:00.664:     decklink-captions.so
+02:39:00.664: ---------------------------------
+02:39:00.664: ---------------------------------
+02:39:00.664: Available Encoders:
+02:39:00.664:   Video Encoders:
+02:39:00.664: 	- ffmpeg_svt_av1 (SVT-AV1)
+02:39:00.664: 	- ffmpeg_aom_av1 (AOM AV1)
+02:39:00.664: 	- ffmpeg_vaapi_tex (FFmpeg VAAPI H.264)
+02:39:00.664: 	- hevc_ffmpeg_vaapi_tex (FFmpeg VAAPI HEVC)
+02:39:00.664: 	- obs_x264 (x264)
+02:39:00.664:   Audio Encoders:
+02:39:00.664: 	- ffmpeg_aac (FFmpeg AAC)
+02:39:00.664: 	- ffmpeg_opus (FFmpeg Opus)
+02:39:00.664: 	- ffmpeg_pcm_s16le (FFmpeg PCM (16-bit))
+02:39:00.664: 	- ffmpeg_pcm_s24le (FFmpeg PCM (24-bit))
+02:39:00.664: 	- ffmpeg_pcm_f32le (FFmpeg PCM (32-bit float))
+02:39:00.664: 	- ffmpeg_alac (FFmpeg ALAC (24-bit))
+02:39:00.664: 	- ffmpeg_flac (FFmpeg FLAC (16-bit))
+02:39:00.664: 	- libfdk_aac (libfdk AAC)
+02:39:00.664: ==== Startup complete ===============================================
+02:39:00.666: dbus reply error: [ "org.freedesktop.DBus.Error.UnknownMethod" ] "No such interface “org.freedesktop.portal.Settings” on object at path /org/freedesktop/portal/desktop"
+02:39:00.667: dbus reply error: [ "org.freedesktop.DBus.Error.UnknownMethod" ] "No such interface “org.freedesktop.portal.Settings” on object at path /org/freedesktop/portal/desktop"
+02:39:00.699: All scene data cleared
+02:39:00.699: ------------------------------------------------
+02:39:00.701: pulse-input: Server name: 'PulseAudio (on PipeWire 1.4.9) 15.0.0'
+02:39:00.701: pulse-input: Audio format: s16le, 48000 Hz, 2 channels
+02:39:00.701: pulse-input: Started recording from 'alsa_output.usb-HECATE_G35_GAMING_HEADSET_HECATE_G35_GAMING_HEADSET_20250513-00.analog-stereo.monitor' (default)
+02:39:00.701: [Loaded global audio device]: 'Desktop Audio'
+02:39:00.702: pulse-input: Server name: 'PulseAudio (on PipeWire 1.4.9) 15.0.0'
+02:39:00.702: pulse-input: Audio format: s16le, 48000 Hz, 1 channels
+02:39:00.702: pulse-input: Started recording from 'alsa_input.usb-HECATE_G35_GAMING_HEADSET_HECATE_G35_GAMING_HEADSET_20250513-00.mono-fallback' (default)
+02:39:00.702: [Loaded global audio device]: 'Mic/Aux'
+02:39:00.702: Switched to scene 'Scene'
+02:39:00.703: ------------------------------------------------
+02:39:00.703: Loaded scenes:
+02:39:00.703: - scene 'Scene':
+02:39:00.703: ------------------------------------------------
+02:39:00.719: Device for 'Audio Output Capture' source is also used for audio monitoring:
+02:39:00.719: Deduplication logic is being applied to all monitored sources.
+02:39:00.719: 
+02:39:01.274: adding 21 milliseconds of audio buffering, total audio buffering is now 21 milliseconds (source: Desktop Audio)
+02:39:01.274: 
+02:39:01.338: adding 21 milliseconds of audio buffering, total audio buffering is now 42 milliseconds (source: Mic/Aux)
+02:39:01.338: 
+02:39:03.994: PipeWire initialized
+02:39:03.998: User added source 'Screen Capture (PipeWire)' (pipewire-screen-capture-source) to scene 'Scene'
+02:39:04.008: [pipewire] Screencast session created
+02:39:04.012: virtual void QtWaylandClient::QWaylandTextInputv3::disableSurface(wl_surface*) Try to disable surface 0x5570b5dd8540 with focusing surface 0x5570b55dc910
+02:39:05.245: [pipewire] Asking for monitor and window
+02:39:05.250: [pipewire] source selected, setting up screencast
+02:39:05.254: [pipewire] Server version: 1.4.9
+02:39:05.254: [pipewire] Library version: 1.4.9
+02:39:05.254: [pipewire] Header version: 1.4.9
+02:39:05.254: [pipewire] Created stream 0x5570b791fcd0
+02:39:05.254: [pipewire] Stream 0x5570b791fcd0 state: "connecting" (error: none)
+02:39:05.255: [pipewire] Playing stream 0x5570b791fcd0
+02:39:05.255: [pipewire] Stream 0x5570b791fcd0 state: "paused" (error: none)
+02:39:05.262: [pipewire] Negotiated format:
+02:39:05.262: [pipewire]     Format: 8 (Spa:Enum:VideoFormat:BGRx)
+02:39:05.262: [pipewire]     Modifier: 0x0
+02:39:05.262: [pipewire]     Size: 2560x1440
+02:39:05.262: [pipewire]     Framerate: 0/1
+02:39:05.263: [pipewire] Negotiated format:
+02:39:05.263: [pipewire]     Format: 8 (Spa:Enum:VideoFormat:BGRx)
+02:39:05.263: [pipewire]     Modifier: 0x20000000056bb03
+02:39:05.263: [pipewire]     Size: 2560x1440
+02:39:05.263: [pipewire]     Framerate: 0/1
+02:39:05.263: [pipewire] Stream 0x5570b791fcd0 state: "streaming" (error: none)
+02:39:05.274: Cannot create EGLImage: Arguments are inconsistent (for example, a valid context requires buffers not supplied by a valid surface).
+02:39:05.274: [pipewire] Renegotiating stream
+02:39:05.274: [pipewire] Stream 0x5570b791fcd0 state: "paused" (error: none)
+02:39:05.274: [pipewire] Negotiated format:
+02:39:05.274: [pipewire]     Format: 8 (Spa:Enum:VideoFormat:BGRx)
+02:39:05.274: [pipewire]     Modifier: 0x20000000056bb03
+02:39:05.274: [pipewire]     Size: 2560x1440
+02:39:05.274: [pipewire]     Framerate: 0/1
+02:39:05.275: [pipewire] Negotiated format:
+02:39:05.275: [pipewire]     Format: 8 (Spa:Enum:VideoFormat:BGRx)
+02:39:05.275: [pipewire]     Modifier: 0x200000000401b03
+02:39:05.275: [pipewire]     Size: 2560x1440
+02:39:05.275: [pipewire]     Framerate: 0/1
+02:39:05.276: [pipewire] Stream 0x5570b791fcd0 state: "streaming" (error: none)
+02:39:28.135: ---------------------------------
+02:39:28.135: [x264 encoder: 'simple_video_stream'] preset: veryfast
+02:39:28.138: [x264 encoder: 'simple_video_stream'] settings:
+02:39:28.138: 	rate_control: CBR
+02:39:28.138: 	bitrate:      6000
+02:39:28.138: 	buffer size:  6000
+02:39:28.138: 	crf:          23
+02:39:28.138: 	fps_num:      60
+02:39:28.138: 	fps_den:      1
+02:39:28.138: 	width:        1920
+02:39:28.138: 	height:       1080
+02:39:28.138: 	keyint:       250
+02:39:28.138: 
+02:39:28.144: libfdk_aac encoder created
+02:39:28.144: libfdk_aac bitrate: 160, channels: 2
+02:39:28.145: ==== Recording Start ===============================================
+02:39:28.145: [mp4 output: 'simple_file_output'] Writing Hybrid MP4/MOV file '/home/celeb/2025-11-07 02-39-28.mp4'...
+02:39:33.773: [mp4 muxer: 'simple_file_output'] Flushing final fragment...
+02:39:33.773: [mp4 muxer: 'simple_file_output'] Number of fragments: 2
+02:39:33.773: [mp4 muxer: 'simple_file_output'] Full moov size: 5 KiB
+02:39:33.773: [mp4 muxer: 'simple_file_output'] Final mdat size: 3680 KiB
+02:39:33.773: Output 'simple_file_output': stopping
+02:39:33.773: Output 'simple_file_output': Total frames output: 299
+02:39:33.773: Output 'simple_file_output': Total drawn frames: 338
+02:39:33.773: [mp4 output: 'simple_file_output'] Waiting for file writer to finish...
+02:39:33.773: [mp4 output: 'simple_file_output'] File output complete. Finalization took 0 ms.
+02:39:33.774: ==== Recording Stop ================================================
+02:39:33.783: libfdk_aac encoder destroyed
+02:40:18.191: Get on org.freedesktop.portal.Settings returned an invalid reply
+02:40:18.191: Get on org.freedesktop.portal.Settings returned an invalid reply
+02:41:13.085: Settings changed (outputs)
+02:41:13.085: ------------------------------------------------
+02:41:18.798: Settings changed (outputs)
+02:41:18.798: ------------------------------------------------
+02:41:21.568: ---------------------------------
+02:41:21.568: [x264 encoder: 'simple_video_stream'] preset: veryfast
+02:41:21.568: [x264 encoder: 'simple_video_stream'] settings:
+02:41:21.568: 	rate_control: CBR
+02:41:21.568: 	bitrate:      6000
+02:41:21.568: 	buffer size:  6000
+02:41:21.568: 	crf:          23
+02:41:21.568: 	fps_num:      60
+02:41:21.568: 	fps_den:      1
+02:41:21.568: 	width:        1920
+02:41:21.568: 	height:       1080
+02:41:21.568: 	keyint:       250
+02:41:21.568: 
+02:41:21.575: libfdk_aac encoder created
+02:41:21.575: libfdk_aac bitrate: 160, channels: 2
+02:41:21.576: ==== Recording Start ===============================================
+02:41:21.576: [mp4 output: 'simple_file_output'] Writing Hybrid MP4/MOV file '/home/celeb/Videos/OBS_recordings/2025-11-07_02-41-21.mp4'...
+02:41:33.573: [mp4 muxer: 'simple_file_output'] Flushing final fragment...
+02:41:33.573: [mp4 muxer: 'simple_file_output'] Number of fragments: 5
+02:41:33.573: [mp4 muxer: 'simple_file_output'] Full moov size: 11 KiB
+02:41:33.573: [mp4 muxer: 'simple_file_output'] Final mdat size: 8450 KiB
+02:41:33.573: Output 'simple_file_output': stopping
+02:41:33.573: Output 'simple_file_output': Total frames output: 681
+02:41:33.573: Output 'simple_file_output': Total drawn frames: 720
+02:41:33.573: [mp4 output: 'simple_file_output'] Waiting for file writer to finish...
+02:41:33.573: [mp4 output: 'simple_file_output'] File output complete. Finalization took 0 ms.
+02:41:33.573: ==== Recording Stop ================================================
+02:41:33.580: libfdk_aac encoder destroyed

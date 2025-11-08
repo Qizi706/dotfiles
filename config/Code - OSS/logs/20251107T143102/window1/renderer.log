@@ -1,0 +1,7 @@
+2025-11-07 14:31:03.041 [info] ChatSessionStore: Migrating 0 chat sessions from storage service to file system
+2025-11-07 14:31:03.100 [info] Started local extension host with pid 37296.
+2025-11-07 14:31:03.113 [info] Started initializing default profile extensions in extensions installation folder. file:///home/celeb/.vscode-oss/extensions
+2025-11-07 14:31:03.175 [info] Completed initializing default profile extensions in extensions installation folder. file:///home/celeb/.vscode-oss/extensions
+2025-11-07 14:31:03.227 [error] CodeExpectedError: No default agent contributed
+    at Hat.activateDefaultAgent (vscode-file://vscode-app/usr/lib/code/out/vs/workbench/workbench.desktop.main.js:2193:12401)
+2025-11-07 14:31:05.842 [info] [perf] Render performance baseline is 13ms
