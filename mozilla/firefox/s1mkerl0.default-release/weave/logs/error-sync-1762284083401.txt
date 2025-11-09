@@ -1,0 +1,61 @@
+1762283694948	Sync.SyncScheduler	DEBUG	Next sync in 600000 ms. (why=schedule)
+1762283791834	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762283796882	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/open-uri
+1762283796882	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/close-uri/v1
+1762283796887	Sync.Engine.Tabs	INFO	Uploading 1 outgoing records
+1762283796887	Sync.Engine.Tabs	INFO	Posting 1 records of 2091 bytes with batch=true
+1762283796887	FirefoxAccounts	TRACE	not checking freshness of profile as it remains recent
+1762283796888	Sync.Collection	DEBUG	POST Length: 2091
+1762283797185	Sync.Collection	DEBUG	POST success 200 https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/270748845/storage/tabs?batch=true&commit=true
+1762283797191	Sync.Telemetry	INFO	Observed notification weave:engine:sync:uploaded but no current sync is being recorded.
+1762283940988	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762283946004	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/open-uri
+1762283946004	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/close-uri/v1
+1762283946008	Sync.Engine.Tabs	INFO	Uploading 1 outgoing records
+1762283946009	Sync.Engine.Tabs	INFO	Posting 1 records of 2219 bytes with batch=true
+1762283946009	FirefoxAccounts	DEBUG	FxAccountsProfileClient: Requested profile
+1762283946009	FirefoxAccounts	DEBUG	getOAuthToken enter
+1762283946010	FirefoxAccounts	TRACE	getCachedToken returning cached token
+1762283946010	FirefoxAccounts	DEBUG	getOAuthToken returning a cached token
+1762283946010	Services.Common.RESTRequest	DEBUG	GET request to https://profile.accounts.firefox.com/v1/profile
+1762283946010	Sync.Collection	DEBUG	POST Length: 2219
+1762283946317	Sync.Collection	DEBUG	POST success 200 https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/270748845/storage/tabs?batch=true&commit=true
+1762283946322	Sync.Telemetry	INFO	Observed notification weave:engine:sync:uploaded but no current sync is being recorded.
+1762283946474	Services.Common.RESTRequest	DEBUG	GET https://profile.accounts.firefox.com/v1/profile 304
+1762283948151	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762283953161	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/open-uri
+1762283953161	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/close-uri/v1
+1762283953167	Sync.Engine.Tabs	INFO	Uploading 1 outgoing records
+1762283953168	Sync.Engine.Tabs	INFO	Posting 1 records of 2115 bytes with batch=true
+1762283953168	FirefoxAccounts	TRACE	not checking freshness of profile as it remains recent
+1762283953168	Sync.Collection	DEBUG	POST Length: 2115
+1762283953471	Sync.Collection	DEBUG	POST success 200 https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/270748845/storage/tabs?batch=true&commit=true
+1762283953476	Sync.Telemetry	INFO	Observed notification weave:engine:sync:uploaded but no current sync is being recorded.
+1762284012182	Sync.SyncScheduler	DEBUG	Network link status changed to "down". Offline?: false
+1762284012182	Sync.SyncScheduler	DEBUG	Clearing sync triggers and the global score.
+1762284012183	Sync.SyncScheduler	DEBUG	Next sync in 600000 ms. (why=schedule)
+1762284012184	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762284042657	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762284073378	Sync.SyncScheduler	DEBUG	Network link status changed to "up". Offline?: false
+1762284073378	Sync.SyncScheduler	DEBUG	Network link looks up. Syncing.
+1762284073379	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762284073379	Sync.Service	DEBUG	User-Agent: Firefox/144.0 (Linux x86_64) FxSync/1.146.0.20251013184459.desktop
+1762284073379	Sync.Service	INFO	Starting sync at 2025-11-05 03:21:13 in browser session NwHm1tHebBnw
+1762284073379	Sync.SyncScheduler	DEBUG	Clearing sync triggers and the global score.
+1762284073380	Sync.Status	INFO	Resetting Status.
+1762284073380	Sync.Status	DEBUG	Status.service: success.status_ok => success.status_ok
+1762284073381	FirefoxAccounts	DEBUG	FxAccountsProfileClient: Requested profile
+1762284073381	FirefoxAccounts	DEBUG	getOAuthToken enter
+1762284073381	FirefoxAccounts	TRACE	getCachedToken returning cached token
+1762284073381	FirefoxAccounts	DEBUG	getOAuthToken returning a cached token
+1762284073381	Services.Common.RESTRequest	DEBUG	GET request to https://profile.accounts.firefox.com/v1/profile
+1762284074721	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762284076192	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762284083398	Services.Common.RESTRequest	DEBUG	GET https://profile.accounts.firefox.com/v1/profile failed: 2152398919 - NS_ERROR_NET_INTERRUPT
+1762284083398	FirefoxAccounts	ERROR	Background refresh of profile failed: {"name":"FxAccountsProfileClientError","code":null,"errno":998,"error":"NETWORK_ERROR","message":"[Exception... \"NS_ERROR_NET_INTERRUPT\"  nsresult: \"0x804b0047 (NS_ERROR_NET_INTERRUPT)\"  location: \"JS frame :: resource://services-common/rest.sys.mjs :: onStopRequest :: line 478\"  data: no]"}
+1762284083399	Sync.Resource	WARN	GET request to https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/270748845/info/collections failed: [Exception... "The connection was established, but the data transfer was interrupted"  nsresult: "0x804b0047 (NS_ERROR_NET_INTERRUPT)"  location: "<unknown>"  data: no] No traceback available
+1762284083399	Sync.Status	DEBUG	Status.sync: success.sync => error.login.reason.network
+1762284083399	Sync.Status	DEBUG	Status.service: success.status_ok => error.sync.failed
+1762284083399	Sync.ErrorHandler	ERROR	Sync encountered an error: [Exception... "The connection was established, but the data transfer was interrupted"  nsresult: "0x804b0047 (NS_ERROR_NET_INTERRUPT)"  location: "<unknown>"  data: no] No traceback available
+1762284083399	Sync.SyncScheduler	DEBUG	Next sync in 600000 ms. (why=reschedule)
+1762284083401	Sync.Service	DEBUG	Exception calling anonymous function: [Exception... "The connection was established, but the data transfer was interrupted"  nsresult: "0x804b0047 (NS_ERROR_NET_INTERRUPT)"  location: "<unknown>"  data: no] No traceback available

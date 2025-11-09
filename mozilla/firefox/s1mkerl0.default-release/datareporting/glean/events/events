@@ -1,0 +1,18 @@
+{"timestamp":797175,"category":"session_restore","name":"backup_can_be_loaded_session_file","extra":{"path_key":"clean","loadfail_reason":"File doesn't exist.","glean_timestamp":"1762669933232","can_load":"false"}}
+{"timestamp":797177,"category":"session_restore","name":"backup_can_be_loaded_session_file","extra":{"glean_timestamp":"1762669933234","path_key":"recovery","can_load":"true","loadfail_reason":"N/A"}}
+{"timestamp":797177,"category":"session_restore","name":"backup_can_be_loaded_session_file","extra":{"glean_timestamp":"1762669933234","can_load":"true","path_key":"recovery","loadfail_reason":"N/A"}}
+{"timestamp":797177,"category":"session_restore","name":"shutdown_success_session_startup","extra":{"glean_timestamp":"1762669933235","shutdown_ok":"true","shutdown_reason":"final-state-write-incomplete"}}
+{"timestamp":797398,"category":"webcompatreporting","name":"reason_dropdown","extra":{"setting":"required","glean_timestamp":"1762669933456"}}
+{"timestamp":797465,"category":"nimbus_events","name":"startup_database_consistency","extra":{"store_active_count":"26","trigger":"startup","primary":"database","glean_timestamp":"1762669933523","db_active_count":"26","total_db_count":"36","total_store_count":"36"}}
+{"timestamp":797505,"category":"doh","name":"state_rollback","extra":{"value":"null","glean_timestamp":"1762669933562"}}
+{"timestamp":797566,"category":"extensions.data","name":"sync_usage_quotas","extra":{"items_count":"0","items_over_quota":"0","backend":"rust","addon_id":"password-manager-firefox-extension@apple.com","glean_timestamp":"1762669933623","total_size_bytes":"0"}}
+{"timestamp":797579,"category":"containers","name":"container_profile_loaded","extra":{"glean_timestamp":"1762669933637","containers":"4"}}
+{"timestamp":797599,"category":"upgrade_dialog","name":"trigger_reason","extra":{"value":"not-major","glean_timestamp":"1762669933657"}}
+{"timestamp":797719,"category":"extensions.data","name":"sync_usage_quotas","extra":{"items_count":"23","backend":"rust","addon_id":"addon@darkreader.org","total_size_bytes":"3036","items_over_quota":"0","glean_timestamp":"1762669933777"}}
+{"timestamp":798308,"category":"normandy","name":"enroll_failed_nimbus_experiment","extra":{"glean_timestamp":"1762669934366","value":"relay-integration-into-firefox-118-release-for-all-fxa-and-autofill-users","reason":"feature-conflict"}}
+{"timestamp":798308,"category":"nimbus_events","name":"enroll_failed","extra":{"reason":"feature-conflict","experiment":"relay-integration-into-firefox-118-release-for-all-fxa-and-autofill-users","glean_timestamp":"1762669934366"}}
+{"timestamp":798327,"category":"normandy","name":"enroll_failed_nimbus_experiment","extra":{"reason":"feature-conflict","value":"vertical-tabs-feature-callout-experiment-v20-treatment-a-rollout","glean_timestamp":"1762669934384"}}
+{"timestamp":798327,"category":"nimbus_events","name":"enroll_failed","extra":{"glean_timestamp":"1762669934384","experiment":"vertical-tabs-feature-callout-experiment-v20-treatment-a-rollout","reason":"feature-conflict"}}
+{"timestamp":798350,"category":"nimbus_events","name":"is_ready","extra":{"glean_timestamp":"1762669934407"}}
+{"timestamp":802444,"category":"normandy","name":"expose_nimbus_experiment","extra":{"featureId":"newtabTrainhopAddon","branchSlug":"rollout","glean_timestamp":"1762669938502","value":"new-tab-145120251009134757-to-release"}}
+{"timestamp":802444,"category":"nimbus_events","name":"exposure","extra":{"experiment":"new-tab-145120251009134757-to-release","branch":"rollout","glean_timestamp":"1762669938502","feature_id":"newtabTrainhopAddon"}}
