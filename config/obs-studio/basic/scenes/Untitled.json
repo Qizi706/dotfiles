@@ -77,12 +77,12 @@
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
-                "id_counter": 6,
+                "id_counter": 11,
                 "custom_size": false,
                 "items": [
                     {
                         "name": "Screen Capture (PipeWire)",
-                        "source_uuid": "11062371-5a84-40e1-b0d4-1543c7360bbb",
+                        "source_uuid": "86177ea1-1ba6-4485-bc33-a4bb7b457626",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -98,7 +98,7 @@
                         "crop_top": 0,
                         "crop_right": 0,
                         "crop_bottom": 0,
-                        "id": 6,
+                        "id": 11,
                         "group_item_backup": false,
                         "pos": {
                             "x": 0.0,
@@ -150,8 +150,8 @@
             "push-to-talk-delay": 0,
             "hotkeys": {
                 "OBSBasic.SelectScene": [],
-                "libobs.show_scene_item.6": [],
-                "libobs.hide_scene_item.6": []
+                "libobs.show_scene_item.11": [],
+                "libobs.hide_scene_item.11": []
             },
             "deinterlace_mode": 0,
             "deinterlace_field_order": 0,
@@ -162,7 +162,7 @@
         {
             "prev_ver": 536870914,
             "name": "Screen Capture (PipeWire)",
-            "uuid": "11062371-5a84-40e1-b0d4-1543c7360bbb",
+            "uuid": "86177ea1-1ba6-4485-bc33-a4bb7b457626",
             "id": "pipewire-screen-capture-source",
             "versioned_id": "pipewire-screen-capture-source",
             "settings": {
@@ -217,7 +217,7 @@
     "transition_duration": 300,
     "preview_locked": false,
     "scaling_enabled": false,
-    "scaling_level": -22,
+    "scaling_level": -2,
     "scaling_off_x": 0.0,
     "scaling_off_y": 0.0,
     "modules": {

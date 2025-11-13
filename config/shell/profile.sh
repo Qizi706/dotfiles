@@ -16,7 +16,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8 # locale
 export EDITOR="/usr/bin/nvim"
 export PAGER="/usr/bin/less"
-export MOZ_USE_XINPUT2=1 # firefox pixel-perfect trackpad scrolling
+export MOZ_USE_XINPUT2=1                                                                # firefox pixel-perfect trackpad scrolling
 [ $(cat /etc/hostname) = "fx507" ] && export QTWEBENGINE_CHROMIUM_FLAGS='--disable-gpu' # fix qutebrowser crash on wlroots with nvidia
 [ -x "/usr/bin/qutebrowser" ] && export BROWSER="qutebrowser" || export BROWSER="/usr/local/bin/firefox"
 
@@ -27,9 +27,9 @@ export XDG_PICTURES_DIR="$HOME/pic"
 export XDG_VIDEOS_DIR="$HOME/vid"
 export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/fzfrc"
 
-export XDG_CONFIG_HOME="$HOME/.config"      # analogous to /etc
-export XDG_CACHE_HOME="$HOME/.cache"        # analogous to /var/cache
-export XDG_DATA_HOME="$HOME/.local/share"   # analogous to /usr/share
+export XDG_CONFIG_HOME="$HOME/.config"    # analogous to /etc
+export XDG_CACHE_HOME="$HOME/.cache"      # analogous to /var/cache
+export XDG_DATA_HOME="$HOME/.local/share" # analogous to /usr/share
 export XDG_STATE_HOME="$HOME/.local/state"
 
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
@@ -52,21 +52,23 @@ export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
 export GRIM_DEFAULT_DIR="$HOME/tmp"
 
 export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket # ssh-agent
-export ABDUCO_SOCKET_DIR=$XDG_RUNTIME_DIR # abduco
+export ABDUCO_SOCKET_DIR=$XDG_RUNTIME_DIR              # abduco
 
-export QT_QPA_PLATFORMTHEME=qt6ct # qt theme
+export QT_QPA_PLATFORMTHEME=qt6ct     # qt theme
 export QT_QPA_PLATFORMTHEME_QT6=qt6ct # qt theme
 export QT_STYLE_OVERRIDE=adwaita-dark # qt theme
-export GTK_THEME=Adwaita-dark # for firejail'ed libreoffice theme
+export GTK_THEME=Adwaita-dark         # for firejail'ed libreoffice theme
 
-export WLR_DRM_NO_ATOMIC=1 # fix sway terminal freezes
+export WLR_DRM_NO_ATOMIC=1                  # fix sway terminal freezes
 export ELECTRON_OZONE_PLATFORM_HINT=wayland # electron, disabled to run in xwayland for fcitx5 support
 #export WLR_NO_HARDWARE_CURSORS=1 # external monitor cursor on nvidia
 
 # fcitx
-#export GTK_IM_MODULE=wayland
-#export XMODIFIERS=@im=fcitx
-#export QT_IM_MODULE="wayland;fcitx;ibus"
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export SDL_IM_MODULE=fcitx
+export GLFW_IM_MODULE=ibus
 
 # ibus
 #export GTK_IM_MODULE=ibus

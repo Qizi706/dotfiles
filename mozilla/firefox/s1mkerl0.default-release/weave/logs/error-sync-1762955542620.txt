@@ -1,0 +1,64 @@
+1762955407217	Sync.LogManager	DEBUG	Flushing file log
+1762955407225	Sync.LogManager	DEBUG	Log cleanup threshold time: 1762091407225
+1762955407225	Sync.LogManager	DEBUG	Done deleting files.
+1762955410590	Sync.Engine.Tabs	INFO	Can't do a quick-write as another tab sync is in progress
+1762955411892	Sync.SyncScheduler	DEBUG	Global Score threshold hit, triggering sync.
+1762955411892	Sync.Service	DEBUG	User-Agent: Firefox/145.0 (Linux x86_64) FxSync/1.147.0.20251111004102.desktop
+1762955411892	Sync.Service	INFO	Starting sync at 2025-11-12 21:50:11 in browser session Nhvv1B3fShi-
+1762955411892	Sync.SyncScheduler	DEBUG	Clearing sync triggers and the global score.
+1762955411893	Sync.Status	INFO	Resetting Status.
+1762955411893	Sync.Status	DEBUG	Status.service: success.status_ok => success.status_ok
+1762955411894	FirefoxAccounts	TRACE	not checking freshness of profile as it remains recent
+1762955414770	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762955414889	Sync.SyncScheduler	DEBUG	Next sync in 600000 ms. (why=schedule)
+1762955419896	Sync.Engine.Tabs	INFO	Can't do a quick-write as another tab sync is in progress
+1762955437438	Sync.Collection	WARN	POST request to https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/270748845/storage/tabs?batch=true&commit=true failed: [Exception... "The connection has timed out"  nsresult: "0x804b000e (NS_ERROR_NET_TIMEOUT)"  location: "<unknown>"  data: no] No traceback available
+1762955437438	Sync.Engine.Tabs	WARN	quicksync sync failed: [Exception... "The connection has timed out"  nsresult: "0x804b000e (NS_ERROR_NET_TIMEOUT)"  location: "<unknown>"  data: no] No traceback available
+1762955448604	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955449626	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762955449879	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955450935	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955453845	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955454631	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/open-uri
+1762955454632	FirefoxAccounts	TRACE	Getting command keys: https://identity.mozilla.com/cmd/close-uri/v1
+1762955454633	Sync.Engine.Tabs	INFO	Uploading 1 outgoing records
+1762955454634	Sync.Engine.Tabs	INFO	Posting 1 records of 983 bytes with batch=true
+1762955454634	FirefoxAccounts	TRACE	not checking freshness of profile as it remains recent
+1762955454634	Sync.Collection	DEBUG	POST Length: 983
+1762955454853	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762955455888	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955455890	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955459953	Sync.Engine.Tabs	INFO	Can't do a quick-write as another tab sync is in progress
+1762955465832	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762955465837	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955465862	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955470833	Sync.Engine.Tabs	INFO	Can't do a quick-write as another tab sync is in progress
+1762955493444	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955494880	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955496695	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955500289	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955504693	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762955509757	Sync.Engine.Tabs	INFO	Can't do a quick-write as another tab sync is in progress
+1762955521519	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955526106	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762955526110	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955526125	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955527962	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955528108	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955529625	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955530591	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955531116	Sync.Engine.Tabs	INFO	Can't do a quick-write as another tab sync is in progress
+1762955531400	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change: scheduling a quick-write in 5000ms
+1762955533363	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955533883	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955535362	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955535365	Sync.Engine.Tabs.Tracker	DEBUG	Detected a tab change, but a quick-write is already scheduled
+1762955536472	Sync.Engine.Tabs	INFO	Can't do a quick-write as another tab sync is in progress
+1762955538445	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955540407	Sync.SyncScheduler	DEBUG	Network link status changed to "changed". Offline?: false
+1762955542617	Sync.Resource	WARN	GET request to https://sync-1-us-west1-g.sync.services.mozilla.com/1.5/270748845/info/collections failed: [Exception... "The connection has timed out"  nsresult: "0x804b000e (NS_ERROR_NET_TIMEOUT)"  location: "<unknown>"  data: no] No traceback available
+1762955542617	Sync.Status	DEBUG	Status.sync: success.sync => error.login.reason.network
+1762955542618	Sync.Status	DEBUG	Status.service: success.status_ok => error.sync.failed
+1762955542618	Sync.ErrorHandler	ERROR	Sync encountered an error: [Exception... "The connection has timed out"  nsresult: "0x804b000e (NS_ERROR_NET_TIMEOUT)"  location: "<unknown>"  data: no] No traceback available
+1762955542618	Sync.SyncScheduler	DEBUG	Next sync in 600000 ms. (why=reschedule)
+1762955542620	Sync.Service	DEBUG	Exception calling anonymous function: [Exception... "The connection has timed out"  nsresult: "0x804b000e (NS_ERROR_NET_TIMEOUT)"  location: "<unknown>"  data: no] No traceback available

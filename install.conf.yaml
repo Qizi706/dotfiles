@@ -10,11 +10,34 @@
     ~/.bashrc: bashrc
     ~/.zprofile: zprofile
     ~/.zshrc: zshrc
-    ~/.config: config
+    ~/.config/alacritty: config/alacritty
+    ~/.config/btop: config/btop
+    ~/.config/fcitx: config/fcitx
+    ~/.config/fcitx5: config/fcitx5
+    ~/.config/fish: config/fish
+    ~/.config/fontconfig: config/fontconfig
+    ~/.config/fzf: config/fzf
+    ~/.config/go: config/go
+    ~/.config/gtk-3.0: config/gtk-3.0
+    ~/.config/gtk-4.0: config/gtk-4.0
+    ~/.config/kitty: config/kitty
+    ~/.config/looking-glass: config/looking-glass
+    ~/.config/mako: config/mako
+    ~/.config/nvim: config/nvim
+    ~/.config/obs-studio: config/obs-studio
+    ~/.config/pulse: config/pulse
+    ~/.config/qt5ct: config/qt5ct
+    ~/.config/qt6ct: config/qt6ct
+    ~/.config/shell: config/shell
+    ~/.config/starship.toml: config/starship.toml
+    ~/.config/tmux: config/tmux
+    ~/.config/user-dirs.dirs: config/user-dirs.dirs
+    ~/.config/user-dirs.locale: config/user-dirs.locale
+    ~/.config/vlc: config/vlc
     ~/.local/bin: local/bin
     ~/.mozilla: mozilla
-    /etc/pacman.conf: etc/pacman.conf
-    /etc/libvirt: etc/libvirt
-    /etc/pacman.d: etc/pacman.d
+    # /etc/pacman.conf: etc/pacman.conf
+    # /etc/libvirt: etc/libvirt
+    # /etc/pacman.d: etc/pacman.d
 
 

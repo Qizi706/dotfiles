@@ -1,7 +1,7 @@
 [Hotkey]
-# Enumerate when press trigger key repeatedly
+# Enumerate when holding modifier of Toggle key
 EnumerateWithTriggerKeys=True
-# Temporally switch between first and current Input Method
+# Temporarily Toggle Input Method
 AltTriggerKeys=
 # Enumerate Input Method Forward
 EnumerateForwardKeys=
@@ -9,19 +9,15 @@ EnumerateForwardKeys=
 EnumerateBackwardKeys=
 # Skip first input method while enumerating
 EnumerateSkipFirst=False
+# Enumerate Input Method Group Forward
+EnumerateGroupForwardKeys=
+# Enumerate Input Method Group Backward
+EnumerateGroupBackwardKeys=
 # Time limit in milliseconds for triggering modifier key shortcuts
 ModifierOnlyKeyTimeout=250
 
 [Hotkey/TriggerKeys]
-0=Control+space
-1=Num_Lock
-2=Hangul
-
-[Hotkey/EnumerateGroupForwardKeys]
-0=Super+space
-
-[Hotkey/EnumerateGroupBackwardKeys]
-0=Shift+Super+space
+0=Num_Lock
 
 [Hotkey/ActivateKeys]
 0=Hangul_Hanja
@@ -63,9 +59,9 @@ CompactInputMethodInformation=True
 ShowFirstInputMethodInformation=True
 # Default page size
 DefaultPageSize=5
-# Override Xkb Option
+# Override XKB Option
 OverrideXkbOption=False
-# Custom Xkb Option
+# Custom XKB Option
 CustomXkbOption=
 # Force Enabled Addons
 EnabledAddons=
