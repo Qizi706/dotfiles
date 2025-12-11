@@ -17,6 +17,7 @@
     ~/.config/fish: config/fish
     ~/.config/fontconfig: config/fontconfig
     ~/.config/fzf: config/fzf
+    ~/.config/ghostty: config/ghostty
     ~/.config/go: config/go
     ~/.config/gtk-3.0: config/gtk-3.0
     ~/.config/gtk-4.0: config/gtk-4.0
