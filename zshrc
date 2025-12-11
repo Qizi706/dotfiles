@@ -108,11 +108,12 @@ source ~/.local/bin/proxy_toggle.zsh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias cd="z"
 
 if [[ "$TTY" == *pts* ]]; then
     if [[ -n "$SSH_TTY" ]]; then
         # 纯 TTY 环境或 SSH 环境下，使用默认提示符
-        PROMPT="%n@%m %~ %# "
+        eval "$(starship init zsh)"
     else
         # 在图形界面的终端中启动 Starship
         eval "$(starship init zsh)"
@@ -120,3 +121,5 @@ if [[ "$TTY" == *pts* ]]; then
 else
     PROMPT="%n@%m %~ %# "
 fi
+
+eval "$(zoxide init zsh)"

@@ -16,8 +16,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8 # locale
 export EDITOR="/usr/bin/nvim"
 export PAGER="/usr/bin/less"
-export MOZ_USE_XINPUT2=1                                                                # firefox pixel-perfect trackpad scrolling
-[ $(cat /etc/hostname) = "fx507" ] && export QTWEBENGINE_CHROMIUM_FLAGS='--disable-gpu' # fix qutebrowser crash on wlroots with nvidia
+export MOZ_USE_XINPUT2=1 # firefox pixel-perfect trackpad scrolling
 [ -x "/usr/bin/qutebrowser" ] && export BROWSER="qutebrowser" || export BROWSER="/usr/local/bin/firefox"
 
 export XDG_DOWNLOAD_DIR="$HOME/dls"

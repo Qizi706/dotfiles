@@ -10,6 +10,7 @@ hide_window_decorations yes
 # Cursor Configuration
 cursor_shape block
 cursor_blink_interval 1
+cursor_trail 1
 
 # Scrollback
 scrollback_lines 3000
@@ -41,3 +42,11 @@ include dank-theme.conf
 # Catppuccin-Mocha
 include current-theme.conf
 # END_KITTY_THEME
+
+
+# BEGIN_KITTY_FONTS
+font_family      family="JetBrainsMono Nerd Font"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
