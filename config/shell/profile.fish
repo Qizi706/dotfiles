@@ -27,7 +27,7 @@ set -gx PAGER /usr/bin/less
 
 set -gx MOZ_USE_XINPUT2 1
 
-set -gx BROWSER /usr/local/bin/firefox
+set -gx BROWSER /usr/bin/firefox
 
 # --------------------------
 # 3. XDG Basic Catalog Env

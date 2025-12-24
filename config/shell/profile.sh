@@ -17,7 +17,7 @@ export LC_ALL=en_US.UTF-8 # locale
 export EDITOR="/usr/bin/nvim"
 export PAGER="/usr/bin/less"
 export MOZ_USE_XINPUT2=1 # firefox pixel-perfect trackpad scrolling
-[ -x "/usr/bin/qutebrowser" ] && export BROWSER="qutebrowser" || export BROWSER="/usr/local/bin/firefox"
+[ -x "/usr/bin/qutebrowser" ] && export BROWSER="qutebrowser" || export BROWSER="/usr/bin/firefox"
 
 export XDG_DOWNLOAD_DIR="$HOME/dls"
 export XDG_DOCUMENTS_DIR="$HOME/doc"
