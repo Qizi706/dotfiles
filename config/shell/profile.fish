@@ -99,3 +99,5 @@ set -gx QT_IM_MODULE fcitx
 set -gx XMODIFIERS @im=fcitx
 set -gx SDL_IM_MODULE fcitx
 set -gx GLFW_IM_MODULE ibus # GLFW IM MODULE
+
+set -U fish_user_paths ~/.local/npm-global/bin $fish_user_paths
