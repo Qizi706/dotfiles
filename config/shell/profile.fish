@@ -53,7 +53,6 @@ set -gx INPUTRC "$XDG_CONFIG_HOME/readline/inputrc"
 
 set -gx CALCHISTFILE "$XDG_CACHE_HOME/calc_history"
 set -gx CUDA_CACHE_PATH "$XDG_CACHE_HOME/nv"
-set -gx GTK2_RC_FILES "$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 set -gx W3M_DIR "$XDG_STATE_HOME/w3m"
 set -gx WGETRC "$XDG_CONFIG_HOME/wget/wgetrc"
 set -gx ANDROID_SDK_HOME "$XDG_CONFIG_HOME/android"
@@ -80,10 +79,10 @@ set -gx ABDUCO_SOCKET_DIR "$XDG_RUNTIME_DIR"
 # --------------------------
 
 # QT/GTK
-set -gx QT_QPA_PLATFORMTHEME qt6ct
-set -gx QT_QPA_PLATFORMTHEME_QT6 qt6ct
-set -gx QT_STYLE_OVERRIDE adwaita-dark
-set -gx GTK_THEME Adwaita-dark
+# set -gx QT_QPA_PLATFORMTHEME qt6ct
+# set -gx QT_QPA_PLATFORMTHEME_QT6 qt6ct
+# set -gx QT_STYLE_OVERRIDE adwaita-dark
+# set -gx GTK_THEME Adwaita-dark
 
 # Wayland / Electron
 set -gx WLR_DRM_NO_ATOMIC 1

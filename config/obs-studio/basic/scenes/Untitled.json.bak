@@ -102,19 +102,19 @@
                         "group_item_backup": false,
                         "pos": {
                             "x": 0.0,
-                            "y": 0.0
+                            "y": 57.0
                         },
                         "pos_rel": {
                             "x": -1.7777777910232544,
-                            "y": -1.0
+                            "y": -0.894444465637207
                         },
                         "scale": {
-                            "x": 0.75,
-                            "y": 0.75
+                            "x": 0.7593179941177368,
+                            "y": 0.7594654560089111
                         },
                         "scale_rel": {
-                            "x": 0.75,
-                            "y": 0.75
+                            "x": 0.7593179941177368,
+                            "y": 0.7594654560089111
                         },
                         "bounds": {
                             "x": 0.0,
@@ -187,37 +187,15 @@
         }
     ],
     "groups": [],
-    "quick_transitions": [
-        {
-            "name": "Cut",
-            "duration": 300,
-            "hotkeys": [],
-            "id": 1,
-            "fade_to_black": false
-        },
-        {
-            "name": "Fade",
-            "duration": 300,
-            "hotkeys": [],
-            "id": 2,
-            "fade_to_black": false
-        },
-        {
-            "name": "Fade",
-            "duration": 300,
-            "hotkeys": [],
-            "id": 3,
-            "fade_to_black": true
-        }
-    ],
+    "quick_transitions": [],
     "transitions": [],
     "saved_projectors": [],
     "canvases": [],
-    "current_transition": "Fade",
+    "current_transition": "淡入淡出",
     "transition_duration": 300,
     "preview_locked": false,
-    "scaling_enabled": false,
-    "scaling_level": -2,
+    "scaling_enabled": true,
+    "scaling_level": 0,
     "scaling_off_x": 0.0,
     "scaling_off_y": 0.0,
     "modules": {
