@@ -18,7 +18,7 @@
 @define-color window_bg_color #181825;
 @define-color window_fg_color #cdd6f4;
 /* Make it more similar to Adwaita */
-@define-color view_bg_color #1e1e2e;
+@define-color view_bg_color #181825;
 @define-color view_fg_color #cdd6f4;
 @define-color headerbar_bg_color #181825;
 @define-color headerbar_fg_color #cdd6f4;
@@ -34,7 +34,7 @@ a color between surface and surface container so I think just giving this surfac
 @define-color overview_fg_color #cdd6f4;
 @define-color popover_bg_color #1e1e2e;
 @define-color popover_fg_color #cdd6f4;
-@define-color dialog_bg_color #1e1e2e;
+@define-color dialog_bg_color #181825;
 @define-color dialog_fg_color #cdd6f4;
 
 /* Backdrop/unfocused states - prevents white flash on window unfocus */
