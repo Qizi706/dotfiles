@@ -16,7 +16,7 @@ path_prepend() {
 path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/.local/sbin"
 
-[ -x /usr/bin/bat ] && export MANROFFOPT="-c" && export MANPAGER="sh -c 'col -bx | bat --pager \"less -R\" -l man -p'"
+command -v bat >/dev/null && export MANROFFOPT="-c" && export MANPAGER="sh -c 'col -bx | bat --pager \"less -R\" -l man -p'"
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8 # locale
@@ -36,7 +36,7 @@ export XDG_CACHE_HOME="$HOME/.cache"      # analogous to /var/cache
 export XDG_DATA_HOME="$HOME/.local/share" # analogous to /usr/share
 export XDG_STATE_HOME="$HOME/.local/state"
 
-export CUDA_CACHE_PATH="$XDG_HOME_HOME/nv"
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export GOPATH="$XDG_DATA_HOME/go"
