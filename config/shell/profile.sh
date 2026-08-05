@@ -5,8 +5,16 @@
 
 [ "$UID" -eq 0 ] || umask 027 # dir/file:750/640
 
-[ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:${PATH}"
-[ -d "$HOME/.local/sbin" ] && PATH="$HOME/.local/sbin:${PATH}"
+path_prepend() {
+  [ -d "$1" ] || return
+  case ":$PATH:" in
+  *":$1:"*) ;;
+  *) PATH="$1${PATH:+:$PATH}" ;;
+  esac
+}
+
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/.local/sbin"
 
 [ -x /usr/bin/bat ] && export MANROFFOPT="-c" && export MANPAGER="sh -c 'col -bx | bat --pager \"less -R\" -l man -p'"
 
