@@ -7,6 +7,20 @@ export ZSH="$HOME/.oh-my-zsh"
 command -v brew >/dev/null && eval "$(brew shellenv)"
 
 typeset -U fpath
+
+# Prefer zsh's native Git completion over Homebrew Git's Bash wrapper. The
+# native completion expands both short and long options from a single `-`.
+if [[ -n ${HOMEBREW_PREFIX:-} ]]; then
+  for git_completion_dir in $fpath; do
+    if [[ $git_completion_dir != "$HOMEBREW_PREFIX/share/zsh/site-functions" &&
+          -r "$git_completion_dir/_git" ]]; then
+      fpath=("$git_completion_dir" $fpath)
+      break
+    fi
+  done
+  unset git_completion_dir
+fi
+
 fpath=(
   "${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-completions/src"
   $fpath
