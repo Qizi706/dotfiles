@@ -1,0 +1,15 @@
+.DS_Store
+
+# Zsh runtime
+.zsh_history
+.histfile
+.zcompdump*
+*.zwc
+
+# Runtime/cache/secrets
+.cache/
+.local/state/
+.ssh/
+.env
+.env.*
+*.secret
