@@ -1,0 +1,42 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.profile: profile
+    ~/.bash_profile: bash_profile
+    ~/.bashrc: bashrc
+    ~/.zprofile: zprofile
+    ~/.zshrc: zshrc
+    ~/.config/alacritty: config/alacritty
+    ~/.config/autostart/FlClash.desktop: config/autostart/FlClash.desktop
+    ~/.config/btop: config/btop
+    ~/.config/fcitx5: config/fcitx5
+    ~/.config/fish: config/fish
+    ~/.config/fontconfig: config/fontconfig
+    ~/.config/fzf: config/fzf
+    ~/.config/ghostty: config/ghostty
+    ~/.config/gtk-3.0: config/gtk-3.0
+    ~/.config/gtk-4.0: config/gtk-4.0
+    ~/.config/hypr: config/hypr
+    ~/.config/kitty: config/kitty
+    ~/.config/looking-glass: config/looking-glass
+    ~/.config/niri: config/niri
+    ~/.config/qt5ct: config/qt5ct
+    ~/.config/qt6ct: config/qt6ct
+    ~/.config/shell: config/shell
+    ~/.config/starship.toml: config/starship.toml
+    ~/.config/systemd/user/hyprland-session.target: config/systemd/user/hyprland-session.target
+    ~/.config/tmux: config/tmux
+    ~/.config/user-dirs.dirs: config/user-dirs.dirs
+    ~/.config/user-dirs.locale: config/user-dirs.locale
+    ~/.config/vlc: config/vlc
+    ~/.local/bin: local/bin
+    # Runtime-heavy or independently managed trees are deliberately excluded:
+    # ~/.config/go, ~/.config/nvim, ~/.config/obs-studio, ~/.config/pulse
+    # ~/.mozilla: mozilla
+    # /etc/pacman.conf: etc/pacman.conf
+    # /etc/libvirt: etc/libvirt
+    # /etc/pacman.d: etc/pacman.d

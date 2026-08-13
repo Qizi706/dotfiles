@@ -1,0 +1,30 @@
+config/QQ/
+config/fcitx5/conf/cached_layouts
+config/ibus/
+
+# Credentials, identity stores, and application runtime state must never be
+# added to this public dotfiles repository.
+etc/
+mozilla/
+config/Code*/
+config/DankMaterialShell/plugins/
+config/DankMaterialShell/plugin_settings.json
+config/DankMaterialShell/settings.json
+config/QtProject.conf
+config/dconf/
+config/fcitx/
+config/fish/conf.d/*.bak
+config/go/
+config/gtk-3.0/assets
+config/hypr/.dms-backups/
+config/io.github.clash-verge-rev.clash-verge-rev/
+config/looking-glass/imgui.ini
+config/niri/dms/
+config/nvim/
+config/obs-studio/
+config/pulse/
+config/fish/fish_variables*
+config/fontconfig/*.bak
+config/tmux/plugins/
+config/tmux/*.log
+config/vlc/vlc-qt-interface.conf
