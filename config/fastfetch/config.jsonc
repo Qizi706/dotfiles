@@ -1,0 +1,85 @@
+// Inspired by Catnap
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "type": "small",
+        "padding": {
+            "top": 1
+        }
+    },
+    "display": {
+        "separator": " "
+    },
+    "modules": [
+        {
+            "key": "\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557",
+            "type": "custom"
+        },
+        {
+            "key": "\u2551 {#31}\uf007 user    {#keys}\u2551",
+            "type": "title",
+            "format": "{user-name}"
+        },
+        {
+            "key": "\u2551 {#32}\udb80\uddc5 hname   {#keys}\u2551",
+            "type": "title",
+            "format": "{host-name}"
+        },
+        {
+            "key": "\u2551 {#33}\udb80\udd50 uptime  {#keys}\u2551",
+            "type": "uptime"
+        },
+        {
+            "key": "\u2551 {#34}{icon} distro  {#keys}\u2551",
+            "type": "os"
+        },
+        {
+            "key": "\u2551 {#35}\uf013 kernel  {#keys}\u2551",
+            "type": "kernel"
+        },
+        {
+            "key": "\u2551 {#36}\udb80\uddc4 desktop {#keys}\u2551",
+            "type": "de"
+        },
+        {
+            "key": "\u2551 {#31}\ue795 term    {#keys}\u2551",
+            "type": "terminal"
+        },
+        {
+            "key": "\u2551 {#32}\uf489 shell   {#keys}\u2551",
+            "type": "shell"
+        },
+        {
+            "key": "\u2551 {#33}\udb80\udf5b cpu     {#keys}\u2551",
+            "type": "cpu",
+            "showPeCoreCount": true
+        },
+        {
+            "key": "\u2551 {#34}\udb80\ude49 disk    {#keys}\u2551",
+            "type": "disk",
+            "folders": "/"
+        },
+        {
+            "key": "\u2551 {#35}\uefc5 memory  {#keys}\u2551",
+            "type": "memory"
+        },
+        {
+            "key": "\u2551 {#36}\udb82\ude5f network {#keys}\u2551",
+            "type": "localip",
+            "format": "{ipv4} ({ifname})"
+        },
+        {
+            "key": "\u2560\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2563",
+            "type": "custom"
+        },
+        {
+            "key": "\u2551 {#39}\uefcc colors  {#keys}\u2551",
+            "type": "colors",
+            "symbol": "circle"
+        },
+        {
+            "key": "\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d",
+            "type": "custom"
+        }
+    ]
+}

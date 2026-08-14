@@ -1,0 +1,22 @@
+# repository source<TAB>home target
+profile	~/.profile
+bash_profile	~/.bash_profile
+bashrc	~/.bashrc
+zprofile	~/.zprofile
+zshrc	~/.zshrc
+condarc	~/.condarc
+gitconfig	~/.gitconfig
+ssh/config	~/.ssh/config
+gnupg/common.conf	~/.gnupg/common.conf
+config/shell	~/.config/shell
+config/fish/config.fish	~/.config/fish/config.fish
+config/fish/functions	~/.config/fish/functions
+config/fish/completions	~/.config/fish/completions
+config/fish/conf.d/fish_frozen_theme.fish	~/.config/fish/conf.d/fish_frozen_theme.fish
+config/fzf/fzfrc	~/.config/fzf/fzfrc
+config/readline/inputrc	~/.config/readline/inputrc
+config/wget/wgetrc	~/.config/wget/wgetrc
+config/npm/npmrc	~/.config/npm/npmrc
+config/starship.toml	~/.config/starship.toml
+config/tmux/tmux.conf	~/.config/tmux/tmux.conf
+local/bin/proxy_toggle.zsh	~/.local/bin/proxy_toggle.zsh

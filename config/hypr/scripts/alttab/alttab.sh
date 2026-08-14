@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-hyprctl -q dispatch submap alttab
+hyprctl -q dispatch 'hl.dsp.submap("alttab")'
 start=$1
 address=$(hyprctl -j clients | jq -r 'sort_by(.focusHistoryID) | .[] | select(.workspace.id >= 0) | "\(.address)\t\(.title)"' |
   fzf --color prompt:green,pointer:green,current-bg:-1,current-fg:green,gutter:-1,border:bright-black,current-hl:red,hl:red \
@@ -18,4 +18,4 @@ if [ -n "$address" ]; then
   echo "$address" >$XDG_RUNTIME_DIR/hypr/alttab/address
 fi
 
-hyprctl -q dispatch submap reset
+hyprctl -q dispatch 'hl.dsp.submap("reset")'

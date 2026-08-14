@@ -1,0 +1,33 @@
+# AUR or non-official-repository packages required by tracked configuration.
+#
+# This file uses the same @required / @optional format as arch-official.txt.
+# scripts/check-deps never invokes an AUR helper or accesses the network.
+
+# @required
+
+# config/mimeapps.list routes proxy-related URL schemes to this application.
+flclash-bin
+
+# config/fcitx5/conf/classicui.conf selects Theme=OriDark.
+fcitx5-skin-ori-git
+
+# config/hypr/hyprland.lua invokes grimblast directly. The current machine has
+# an unowned /usr/local/bin/grimblast; installing a package or changing those
+# bindings is required to make that dependency reproducible.
+grimblast-git
+
+# @optional
+
+# Optional integrations guarded by the shell/compositor configs.
+linuxqq
+looking-glass-git
+oh-my-zsh-git
+pot-translation
+tmux-plugin-manager
+typora
+wechat
+
+# dms-shell-git is deliberately not an install target here. It conflicts with
+# the stable dms-shell package. scripts/check-deps recognizes an existing
+# dms-shell-git installation as a working legacy provider and reports a
+# reviewed migration to dms-shell + both compositor integration packages.

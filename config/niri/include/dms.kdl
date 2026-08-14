@@ -1,0 +1,21 @@
+// DMS layer integration. Generated appearance modules remain disabled so the
+// hand-maintained appearance/window-rule files are the single source of truth.
+// Do not include dms/binds.kdl, input.kdl, or outputs.kdl: the user-maintained
+// Hyprland-parity modules must remain authoritative for those behaviors.
+layer-rule {
+    match namespace="^quickshell$"
+    place-within-backdrop true
+}
+
+layer-rule {
+    match namespace=r#"^dms:.*"#
+    background-effect {
+        xray false
+    }
+}
+
+// These paths are relative to this file in include/.
+// include optional=true "../dms/colors.kdl"
+// include optional=true "../dms/alttab.kdl"
+// include optional=true "../dms/wpblur.kdl"
+// include optional=true "../dms/windowrules.kdl"

@@ -1,6 +1,5 @@
 # .profile
-# @author celeb zhou
-# @since 2025
+# Portable login profile; personal identity belongs in host-local files.
 # bash specific profile
 
 [ -f "$HOME/.config/shell/profile.sh" ] && . "$HOME/.config/shell/profile.sh"

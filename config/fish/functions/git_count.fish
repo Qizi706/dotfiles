@@ -1,12 +1,30 @@
-function git-count --description "统计指定 commit 之后多个身份的代码贡献"
-    if test (count $argv) -eq 0
-        echo "usage: git-count <commit_hash>"
+function git-count --description "统计指定 commit 之后指定作者的代码贡献"
+    if test (count $argv) -lt 1
+        echo "usage: git-count <commit_hash> [author-regex]"
         return 1
     end
 
     set -l start_commit $argv[1]
-    # 定义你的所有用户名，用 | 分隔
-    set -l authors "celeb zhou|qizi706-macos|QuanZhou"
+    set -l authors
+    if test (count $argv) -ge 2
+        set authors $argv[2]
+    else if set -q GIT_COUNT_AUTHORS
+        set authors $GIT_COUNT_AUTHORS
+    else
+        set -l configured_email (git config user.email)
+        set authors (string escape --style=regex -- "$configured_email")
+    end
 
-    git log $start_commit..HEAD -E --author="$authors" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "---------------------------\n作者群体: '$authors'\n起始提交: '$start_commit'\n---------------------------\n新增行数: %s\n删除行数: %s\n净增行数: %s\n", add, subs, loc }'
+    if test -z "$authors"
+        echo "git-count: pass author-regex, set GIT_COUNT_AUTHORS, or configure user.email" >&2
+        return 1
+    end
+
+    git log "$start_commit..HEAD" -E --author="$authors" --pretty=tformat: --numstat |
+        awk -v authors="$authors" -v start="$start_commit" '
+            { add += $1; subs += $2; loc += $1 - $2 }
+            END {
+                printf "---------------------------\n作者: %s\n起始提交: %s\n---------------------------\n新增行数: %s\n删除行数: %s\n净增行数: %s\n", authors, start, add, subs, loc
+            }
+        '
 end

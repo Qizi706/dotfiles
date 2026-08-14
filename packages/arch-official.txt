@@ -1,0 +1,111 @@
+# Arch repository packages used by the managed configuration.
+#
+# Format consumed by scripts/check-deps:
+#   - one package name per line;
+#   - packages after @required affect the checker exit status;
+#   - packages after @optional are reported but do not fail the check.
+#
+# This is a dependency manifest, not a command to install packages blindly.
+# In particular, read the DMS migration warning printed by scripts/check-deps
+# before replacing dms-shell-git with the stable packages below.
+
+# @required
+
+# Shells and command-line helpers.
+bash
+bat
+fastfetch
+fish
+firefox
+fzf
+gawk
+git
+gnupg
+less
+neovim
+npm
+openssh
+starship
+tmux
+uv
+wget
+zoxide
+zsh
+
+# Primary compositors, shell, terminals, and their direct helpers.
+chafa
+cliphist
+curl
+dgop
+dms-shell
+dms-shell-hyprland
+dms-shell-niri
+foot
+ghostty
+grim
+hyprland
+jq
+nautilus
+networkmanager
+niri
+slurp
+wl-clipboard
+wtype
+xorg-xrdb
+xorg-xwayland
+xwayland-satellite
+
+# Input method and the engine selected by config/fcitx5/profile.
+fcitx5
+fcitx5-chinese-addons
+fcitx5-gtk
+fcitx5-qt
+
+# Audio, screen-cast portals, and DMS external-monitor brightness support.
+i2c-tools
+pipewire
+pipewire-audio
+pipewire-pulse
+wireplumber
+xdg-desktop-portal
+xdg-desktop-portal-gnome
+xdg-desktop-portal-gtk
+xdg-desktop-portal-hyprland
+
+# Fonts and toolkit configuration named by the tracked files.
+matugen
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+qt6ct
+ttf-jetbrains-mono-nerd
+xdg-user-dirs
+
+# @optional
+
+# Managed fallback application configs or non-primary frontends.
+alacritty
+btop
+fcitx5-configtool
+fcitx5-rime
+kitty
+qt5ct
+vlc
+yazi
+zathura
+zathura-pdf-mupdf
+
+# Optional DMS, PipeWire, and screenshot features.
+bluez
+bluez-utils
+cava
+cups-pk-helper
+ddcutil
+hyprpicker
+kimageformats
+libnotify
+pipewire-alsa
+power-profiles-daemon
+qt6-imageformats
+qt6-multimedia
+swappy

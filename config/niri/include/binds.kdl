@@ -1,0 +1,128 @@
+binds {
+    // Applications and DMS panels. Keys intentionally follow Hyprland.
+    Mod+Return hotkey-overlay-title="Open Ghostty" { spawn "ghostty" "+new-window"; }
+    Mod+Shift+R hotkey-overlay-title="Restart DMS" { spawn "dms" "restart"; }
+    Mod+D hotkey-overlay-title="DMS Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    Mod+V hotkey-overlay-title="DMS Clipboard" { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
+    Mod+M hotkey-overlay-title="DMS Process List" { spawn "dms" "ipc" "call" "processlist" "focusOrToggle"; }
+    Mod+Comma hotkey-overlay-title="DMS Settings" { spawn "dms" "ipc" "call" "settings" "focusOrToggle"; }
+    Mod+N hotkey-overlay-title="DMS Notifications" { spawn "dms" "ipc" "call" "notifications" "toggle"; }
+    Mod+Shift+N hotkey-overlay-title="DMS Notepad" { spawn "dms" "ipc" "call" "notepad" "toggle"; }
+    Mod+Y hotkey-overlay-title="DMS Wallpapers" { spawn "dms" "ipc" "call" "dash" "toggle" "wallpaper"; }
+    Mod+E hotkey-overlay-title="Files" { spawn "nautilus"; }
+
+    // Security and session.
+    Mod+Ctrl+L allow-inhibiting=false hotkey-overlay-title="Lock Screen" { spawn "dms" "ipc" "call" "lock" "lock"; }
+    Mod+Shift+E allow-inhibiting=false { quit; }
+    Ctrl+Alt+Delete hotkey-overlay-title="DMS Process List" { spawn "dms" "ipc" "call" "processlist" "focusOrToggle"; }
+
+    // Audio, microphone, media, and brightness.
+    Mod+Ctrl+Equal allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
+    Mod+Ctrl+Minus allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
+    Mod+Ctrl+M allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "mute"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
+    XF86AudioMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "mute"; }
+    XF86AudioMicMute allow-when-locked=true { spawn "dms" "ipc" "call" "mic" "mute"; }
+    XF86AudioPlay allow-when-locked=true { spawn "dms" "ipc" "call" "mpris" "playPause"; }
+    XF86AudioPause allow-when-locked=true { spawn "dms" "ipc" "call" "mpris" "playPause"; }
+    XF86AudioPrev allow-when-locked=true { spawn "dms" "ipc" "call" "mpris" "previous"; }
+    XF86AudioNext allow-when-locked=true { spawn "dms" "ipc" "call" "mpris" "next"; }
+    XF86MonBrightnessUp allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "increment" "5" ""; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "dms" "ipc" "call" "brightness" "decrement" "5" ""; }
+
+    // Window management.
+    Mod+Q repeat=false { close-window; }
+    Mod+F repeat=false { maximize-column; }
+    Mod+Shift+F repeat=false { fullscreen-window; }
+    Mod+Space repeat=false { toggle-window-floating; }
+    Mod+W repeat=false { toggle-column-tabbed-display; }
+    Mod+Ctrl+B repeat=false hotkey-overlay-title="Toggle Window Transparency" { toggle-window-rule-opacity; }
+
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { focus-column-right; }
+    Mod+H     { focus-column-left; }
+    Mod+J     { focus-workspace-down; }
+    Mod+K     { focus-workspace-up; }
+    Mod+L     { focus-column-right; }
+
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Down  { move-window-down; }
+    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+H     { move-column-left; }
+    Mod+Shift+J     { move-window-down; }
+    Mod+Shift+K     { move-window-up; }
+    Mod+Shift+L     { move-column-right; }
+
+    // Workspace navigation and window movement.
+    Mod+Page_Down { focus-workspace-down; }
+    Mod+Page_Up   { focus-workspace-up; }
+    Mod+U         { focus-workspace-down; }
+    Mod+I         { focus-workspace-up; }
+
+    Mod+Shift+Page_Down { move-window-to-workspace-down; }
+    Mod+Shift+Page_Up   { move-window-to-workspace-up; }
+    Mod+Shift+U         { move-window-to-workspace-down; }
+    Mod+Shift+I         { move-window-to-workspace-up; }
+    Mod+Ctrl+Down       { move-window-to-workspace-down; }
+    Mod+Ctrl+Up         { move-window-to-workspace-up; }
+    Mod+Ctrl+U          { move-window-to-workspace-down; }
+    Mod+Ctrl+I          { move-window-to-workspace-up; }
+
+    // Toggle between magic and the workspace that was focused before it.
+    Mod+S { spawn-sh "if niri msg --json workspaces | jq -e 'any(.[]; .is_focused and .name == \"magic\")' >/dev/null; then niri msg action focus-workspace-previous; else niri msg action focus-workspace magic; fi"; }
+    Mod+Shift+S { move-window-to-workspace "magic"; }
+
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+    Mod+Shift+WheelScrollDown cooldown-ms=150 { move-window-to-workspace-down; }
+    Mod+Shift+WheelScrollUp cooldown-ms=150 { move-window-to-workspace-up; }
+
+    Mod+1 { focus-workspace "1"; }
+    Mod+2 { focus-workspace "2"; }
+    Mod+3 { focus-workspace "3"; }
+    Mod+4 { focus-workspace "4"; }
+    Mod+5 { focus-workspace "5"; }
+    Mod+6 { focus-workspace "6"; }
+    Mod+7 { focus-workspace "7"; }
+    Mod+8 { focus-workspace "8"; }
+    Mod+9 { focus-workspace "9"; }
+    Mod+Shift+1 { move-window-to-workspace "1"; }
+    Mod+Shift+2 { move-window-to-workspace "2"; }
+    Mod+Shift+3 { move-window-to-workspace "3"; }
+    Mod+Shift+4 { move-window-to-workspace "4"; }
+    Mod+Shift+5 { move-window-to-workspace "5"; }
+    Mod+Shift+6 { move-window-to-workspace "6"; }
+    Mod+Shift+7 { move-window-to-workspace "7"; }
+    Mod+Shift+8 { move-window-to-workspace "8"; }
+    Mod+Shift+9 { move-window-to-workspace "9"; }
+
+    // Niri scrolling-layout equivalents for Hyprland's dwindle controls.
+    Mod+BracketLeft  { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+R            { switch-preset-column-width; }
+    // Mod+Ctrl+F       { expand-column-to-available-width; }
+    Mod+Minus        { set-column-width "-10%"; }
+    Mod+Equal        { set-column-width "+10%"; }
+    Mod+Shift+Minus  { set-window-height "-10%"; }
+    Mod+Shift+Equal  { set-window-height "+10%"; }
+
+    // DMS IPC opens normal captures in the editor. Alt+Shift+S saves directly.
+    Alt+S hotkey-overlay-title="DMS Region Screenshot" { spawn "dms" "screenshot"; }
+    Alt+Ctrl+S hotkey-overlay-title="DMS Window Screenshot" { spawn "dms" "screenshot" "window"; }
+    Alt+Shift+S hotkey-overlay-title="Save Region Screenshot" { spawn-sh "dms screenshot --dir \"$HOME/Pictures/Screenshots\""; }
+
+    // Display power.
+    Mod+Shift+P { power-off-monitors; }
+    Mod+Shift+O { power-on-monitors; }
+
+    // Pot screenshot translation from the Hyprland config.
+    Mod+C { spawn-sh "mkdir -p \"$XDG_CACHE_HOME/com.pot-app.desktop\" && grim -g \"$(slurp)\" \"$XDG_CACHE_HOME/com.pot-app.desktop/pot_screenshot_cut.png\" && curl --fail --silent --show-error \"127.0.0.1:60828/ocr_translate?screenshot=false\""; }
+
+    Mod+O repeat=false { toggle-overview; }
+    Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+}

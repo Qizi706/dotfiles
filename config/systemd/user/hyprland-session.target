@@ -1,0 +1,7 @@
+[Unit]
+Description=Hyprland graphical session
+BindsTo=graphical-session.target
+Wants=graphical-session-pre.target xdg-desktop-autostart.target
+After=graphical-session-pre.target
+Before=xdg-desktop-autostart.target
+PropagatesStopTo=graphical-session.target

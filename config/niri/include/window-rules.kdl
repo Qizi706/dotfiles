@@ -1,0 +1,128 @@
+// Balanced glass defaults. Xray blur is stable and inexpensive for tiled
+// windows because it samples the wallpaper instead of every window below.
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+    draw-border-with-background false
+    opacity 0.91
+
+    background-effect {
+        blur true
+        xray true
+    }
+
+    // Keep menus readable while giving them a light frosted treatment.
+    popups {
+        geometry-corner-radius 10
+        opacity 0.94
+
+        background-effect {
+            blur true
+            xray false
+        }
+    }
+}
+
+// Floating windows sit above other content, so real (non-xray) blur gives
+// them more convincing depth. Niri currently treats this mode as experimental.
+window-rule {
+    match is-floating=true
+    opacity 0.91
+
+    background-effect {
+        xray false
+    }
+}
+
+// Work around WezTerm's initial configure behavior.
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// De-emphasize inactive windows without making their text look washed out.
+// is-active avoids dimming the current window when a DMS panel takes focus.
+window-rule {
+    match is-active=false
+    opacity 0.91
+}
+
+// Explicitly tiled utility windows.
+window-rule {
+    match app-id=r#"^gnome-control-center$"#
+    match app-id=r#"^pavucontrol$"#
+    match app-id=r#"^nm-connection-editor$"#
+    open-floating false
+}
+
+// Floating utilities and chat applications.
+window-rule {
+    match app-id=r#"^(org\.gnome\.)?Calculator$"#
+    match app-id=r#"^gnome-calculator$"#
+    match app-id=r#"^galculator$"#
+    match app-id=r#"^blueman-manager$"#
+    match app-id=r#"^org\.gnome\.Nautilus$"#
+    match app-id=r#"^steam$"#
+    match app-id=r#"^xdg-desktop-portal$"#
+    match app-id=r#"^discord$"#
+    match app-id=r#"^wechat$"#
+    match app-id=r#"^QQ$"#
+    match app-id=r#"^zoom$"#
+    open-floating true
+}
+
+window-rule {
+    match title=r#"^Open Files$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"firefox$"# title=r#"^Picture-in-Picture$"#
+    open-floating true
+    opacity 1.0
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
+// DMS uses Quickshell for any regular (non-layer-shell) windows.
+window-rule {
+    match app-id=r#"^org\.quickshell$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^steam$"# title=r#"^notificationtoasts_\d+_desktop$"#
+    default-floating-position x=10 y=10 relative-to="bottom-right"
+    open-focused false
+}
+
+// Preserve the Hyprland exceptions: QQ and WeChat stay opaque and do not blur.
+window-rule {
+    match app-id=r#"^QQ$"#
+    match app-id=r#"^wechat$"#
+    opacity 1.0
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
+// Preserve the Hyprland workspace routing.
+window-rule {
+    match app-id=r#"^QQ$"#
+    match app-id=r#"^wechat$"#
+    match app-id=r#"^discord$"#
+    open-on-workspace "2"
+}
+
+window-rule {
+    match app-id=r#"^com\.follow\.clash$"#
+    open-on-workspace "magic"
+}
+
+window-rule {
+    match app-id=r#"^pot$"#
+    open-floating true
+}

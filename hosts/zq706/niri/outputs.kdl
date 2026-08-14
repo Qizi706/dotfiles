@@ -1,0 +1,8 @@
+// zq706: connector and exact mode verified with niri msg outputs.
+output "DP-4" {
+    mode "2560x1440@143.999"
+    scale 1.25
+    position x=0 y=0
+    // VRR is intentionally disabled: this connector reports it unsupported.
+    focus-at-startup
+}

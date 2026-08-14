@@ -1,0 +1,4 @@
+# Machine/account identity is intentionally not public or shared. The installer
+# creates ~/.config/git, while each machine supplies local.conf from the template.
+[include]
+	path = ~/.config/git/local.conf

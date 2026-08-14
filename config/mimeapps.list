@@ -1,4 +1,16 @@
-
 [Default Applications]
-x-scheme-handler/clash=clash-verge.desktop
-x-scheme-handler/clash-verge=clash-verge-handler.desktop
+x-scheme-handler/clash=flclash.desktop;
+x-scheme-handler/clash-verge=flclash.desktop;
+x-scheme-handler/mihomo=flclash.desktop;
+application/pdf=firefox.desktop;
+text/html=dms-open.desktop;
+x-scheme-handler/http=dms-open.desktop;
+x-scheme-handler/https=dms-open.desktop;
+x-scheme-handler/about=firefox.desktop;
+x-scheme-handler/unknown=firefox.desktop;
+
+[Added Associations]
+application/pdf=firefox.desktop;
+x-scheme-handler/clash=flclash.desktop;
+x-scheme-handler/clash-verge=flclash.desktop;
+x-scheme-handler/mihomo=flclash.desktop;

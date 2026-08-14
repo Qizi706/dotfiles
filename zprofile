@@ -1,6 +1,5 @@
 # .zprofile
-# @author celeb zhou
-# @since 2025
+# Portable Zsh login profile; personal identity belongs in host-local files.
 # zsh specific profile
 
 [ -f "${HOME}/.config/shell/profile.sh" ] && . "${HOME}/.config/shell/profile.sh"

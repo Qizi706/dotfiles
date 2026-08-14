@@ -11,14 +11,14 @@ if status is-interactive
     type -q zoxide; and zoxide init fish | source
     type -q starship; and starship init fish | source
 
-    # >>> conda initialize >>>
-    # !! Contents within this block are managed by 'conda init' !!
-    if test -f /home/celeb/Programming/miniconda3/bin/conda
-        eval /home/celeb/Programming/miniconda3/bin/conda "shell.fish" "hook" $argv | source
-    else if test -f /home/celeb/Programming/miniconda3/etc/fish/conf.d/conda.fish
-        source /home/celeb/Programming/miniconda3/etc/fish/conf.d/conda.fish
-    else
-        fish_add_path --global --prepend /home/celeb/Programming/miniconda3/bin
+    set -l conda_executable (command -s conda)
+    if test -z "$conda_executable"; and test -x "$HOME/Programming/miniconda3/bin/conda"
+        set conda_executable "$HOME/Programming/miniconda3/bin/conda"
     end
-    # <<< conda initialize <<<
+
+    if test -n "$conda_executable"
+        "$conda_executable" shell.fish hook $argv | source
+    else if test -f "$HOME/Programming/miniconda3/etc/fish/conf.d/conda.fish"
+        source "$HOME/Programming/miniconda3/etc/fish/conf.d/conda.fish"
+    end
 end

@@ -1,0 +1,227 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+tmpdir=$(mktemp -d /tmp/dotfiles-validate.XXXXXX)
+cleanup() {
+    if [[ -n "${tmpdir:-}" && "$tmpdir" == /tmp/dotfiles-validate.* ]]; then
+        rm -rf -- "$tmpdir"
+    fi
+}
+trap cleanup EXIT
+
+passed=0
+failed=0
+skipped=0
+
+run() {
+    local label=$1
+    shift
+    if "$@" >"$tmpdir/last.log" 2>&1; then
+        printf 'PASS  %s\n' "$label"
+        ((passed += 1))
+    else
+        printf 'FAIL  %s\n' "$label" >&2
+        sed 's/^/      /' "$tmpdir/last.log" >&2
+        ((failed += 1))
+    fi
+}
+
+skip() {
+    printf 'SKIP  %s (%s unavailable)\n' "$1" "$2"
+    ((skipped += 1))
+}
+
+cd "$repo_dir"
+
+run 'installer and Bash files' bash -n \
+    install profile bash_profile bashrc config/shell/profile.sh \
+    config/hypr/scripts/alttab/alttab.sh \
+    config/hypr/scripts/alttab/disable.sh \
+    config/hypr/scripts/alttab/enable.sh \
+    config/hypr/scripts/alttab/preview.sh
+
+if command -v zsh >/dev/null; then
+    run 'Zsh files' zsh -n zprofile zshrc local/bin/proxy_toggle.zsh
+else
+    skip 'Zsh files' zsh
+fi
+
+if command -v fish >/dev/null; then
+    mapfile -t fish_files < <(find config/fish -type f -name '*.fish' -print | sort)
+    run 'Fish files' fish -n "${fish_files[@]}"
+else
+    skip 'Fish files' fish
+fi
+
+if command -v luac >/dev/null; then
+    run 'Hyprland Lua syntax' luac -p config/hypr/hyprland.lua hosts/zq706/hypr/machine.lua
+else
+    skip 'Hyprland Lua syntax' luac
+fi
+
+mkdir -p "$tmpdir/niri/local" "$tmpdir/hypr/local"
+cp config/niri/config.kdl "$tmpdir/niri/config.kdl"
+ln -s "$repo_dir/config/niri/include" "$tmpdir/niri/include"
+ln -s "$repo_dir/hosts/zq706/niri/outputs.kdl" "$tmpdir/niri/local/outputs.kdl"
+ln -s "$repo_dir/hosts/zq706/niri/hardware.kdl" "$tmpdir/niri/local/hardware.kdl"
+cp config/hypr/hyprland.lua "$tmpdir/hypr/hyprland.lua"
+ln -s "$repo_dir/hosts/zq706/hypr/machine.lua" "$tmpdir/hypr/local/machine.lua"
+
+if command -v niri >/dev/null; then
+    run 'Niri shared config' niri validate -c config/niri/config.kdl
+    run 'Niri zq706 integration' niri validate -c "$tmpdir/niri/config.kdl"
+else
+    skip 'Niri configs' niri
+fi
+
+run 'Niri Mod+J/K workspace semantics' bash -c '
+    [[ $(grep -R -h -E "^[[:space:]]*Mod\\+J[[:space:]]" config/niri/include/*.kdl | wc -l) -eq 1 ]] &&
+    [[ $(grep -R -h -E "^[[:space:]]*Mod\\+K[[:space:]]" config/niri/include/*.kdl | wc -l) -eq 1 ]] &&
+    grep -Fqx "    Mod+J     { focus-workspace-down; }" config/niri/include/binds.kdl &&
+    grep -Fqx "    Mod+K     { focus-workspace-up; }" config/niri/include/binds.kdl &&
+    ! grep -R -E "^[[:space:]]*include.*dms/binds" config/niri/config.kdl config/niri/include/*.kdl
+'
+
+if command -v Hyprland >/dev/null; then
+    run 'Hyprland shared config' Hyprland --verify-config -c config/hypr/hyprland.lua
+    run 'Hyprland zq706 integration' Hyprland --verify-config -c "$tmpdir/hypr/hyprland.lua"
+else
+    skip 'Hyprland configs' Hyprland
+fi
+
+mkdir -p "$tmpdir/home/.config/foot" "$tmpdir/home/.config/ghostty/shaders"
+ln -s "$repo_dir/config/foot/foot.ini" "$tmpdir/home/.config/foot/foot.ini"
+ln -s "$repo_dir/config/foot/catppuccin-mocha.ini" "$tmpdir/home/.config/foot/catppuccin-mocha.ini"
+ln -s "$repo_dir/config/ghostty/config" "$tmpdir/home/.config/ghostty/config"
+ln -s "$repo_dir/config/ghostty/shaders/cursor_warp_hex.glsl" "$tmpdir/home/.config/ghostty/shaders/cursor_warp_hex.glsl"
+
+if command -v foot >/dev/null; then
+    run 'Foot config' env HOME="$tmpdir/home" foot -C -c "$tmpdir/home/.config/foot/foot.ini"
+else
+    skip 'Foot config' foot
+fi
+
+if command -v ghostty >/dev/null; then
+    run 'Ghostty config' env HOME="$tmpdir/home" ghostty +validate-config --config-file="$tmpdir/home/.config/ghostty/config"
+else
+    skip 'Ghostty config' ghostty
+fi
+
+if command -v fastfetch >/dev/null; then
+    run 'Fastfetch config' fastfetch --config config/fastfetch/config.jsonc --format json
+else
+    skip 'Fastfetch config' fastfetch
+fi
+
+if command -v tmux >/dev/null; then
+    run 'tmux config' env HOME="$tmpdir/home" TMUX_TMPDIR="$tmpdir" \
+        bash -c 'tmux -L dotfiles-validate -f "$1" new-session -d && tmux -L dotfiles-validate show-options -sv extended-keys | grep -qx "always" && tmux -L dotfiles-validate kill-server' \
+        _ "$repo_dir/config/tmux/tmux.conf"
+else
+    skip 'tmux config' tmux
+fi
+
+if command -v ssh >/dev/null; then
+    run 'OpenSSH config' ssh -G -F ssh/config example.invalid
+else
+    skip 'OpenSSH config' ssh
+fi
+
+if command -v gpg >/dev/null; then
+    mkdir -m 0700 "$tmpdir/gnupg"
+    run 'GnuPG config' env GNUPGHOME="$tmpdir/gnupg" gpg --options "$repo_dir/gnupg/common.conf" --list-keys
+else
+    skip 'GnuPG config' gpg
+fi
+
+run 'Git config' git config --file gitconfig --list
+
+if command -v conda >/dev/null; then
+    run 'Conda config' conda config --file "$repo_dir/condarc" --show
+else
+    skip 'Conda config' conda
+fi
+
+run 'Electron application flags' bash -c '
+    set -euo pipefail
+    for file in config/electron-flags.conf config/qq-flags.conf config/typora-flags.conf; do
+        ! grep -Eq "/home/|/Users/" "$file"
+        awk '\''
+            /^[[:space:]]*(#|$)/ { next }
+            ! /^--[a-z0-9-]+(=.*)?$/ { exit 1 }
+            {
+                key = $0
+                sub(/=.*/, "", key)
+                if (seen[key]++) exit 1
+            }
+        '\'' "$file"
+    done
+    grep -Fqx -- "--ozone-platform=wayland" config/electron-flags.conf
+    grep -Fqx -- "--ozone-platform=wayland" config/qq-flags.conf
+    grep -Fqx -- "--ozone-platform-hint=auto" config/typora-flags.conf
+'
+
+run 'MIME application defaults' bash -c '
+    grep -Fqx "[Default Applications]" config/mimeapps.list &&
+    grep -Fqx "application/pdf=firefox.desktop;" config/mimeapps.list &&
+    grep -Fqx "x-scheme-handler/clash=flclash.desktop;" config/mimeapps.list &&
+    grep -Fqx "x-scheme-handler/clash-verge=flclash.desktop;" config/mimeapps.list &&
+    grep -Fqx "x-scheme-handler/mihomo=flclash.desktop;" config/mimeapps.list
+'
+
+if command -v vlc >/dev/null; then
+    run 'VLC option compatibility' bash -c '
+        set -euo pipefail
+        help=$(LC_ALL=C vlc -H --advanced 2>&1)
+        grep -Fq -- "--qt-error-dialogs" <<<"$help"
+        grep -Fq -- "--qt-privacy-ask" <<<"$help"
+        grep -Fq -- "--metadata-network-access" <<<"$help"
+        [[ $(grep -Ec "^[a-z][a-z0-9-]*=" config/vlc/vlcrc) -eq 3 ]]
+    '
+else
+    skip 'VLC option compatibility' vlc
+fi
+
+run 'Zathura config shape' bash -c '
+    set -euo pipefail
+    ! grep -Eq "/home/|/Users/" config/zathura/zathurarc
+    [[ -z $(awk '\''$1 == "set" { print $2 }'\'' config/zathura/zathurarc | sort | uniq -d) ]]
+    [[ $(grep -Ec "^set [a-z0-9-]+ " config/zathura/zathurarc) -eq 6 ]]
+'
+
+run 'DMS generated-file boundary' bash -c '
+    set -euo pipefail
+    generated=(
+        config/DankMaterialShell/firefox.css
+        config/alacritty/dank-theme.toml
+        config/foot/dank-colors.ini
+        config/ghostty/themes/dankcolors
+        config/gtk-3.0/dank-colors.css
+        config/gtk-4.0/dank-colors.css
+        config/kitty/dank-tabs.conf
+        config/kitty/dank-theme.conf
+        config/qt5ct/colors/matugen.conf
+        config/qt6ct/colors/matugen.conf
+    )
+    for path in "${generated[@]}"; do
+        ! git ls-files --error-unmatch "$path" >/dev/null 2>&1
+        git check-ignore -q "$path"
+    done
+    ! awk -F "\\t" '\''NF >= 2 { print $2 }'\'' manifests/desktop.links |
+        grep -Eq "~/.config/(alacritty|foot|ghostty|kitty|qt5ct/colors|qt6ct/colors)$"
+'
+
+if command -v systemd-analyze >/dev/null; then
+    run 'systemd user target' systemd-analyze --user verify config/systemd/user/hyprland-session.target
+else
+    skip 'systemd user target' systemd-analyze
+fi
+run 'installer regression suite' scripts/test-install
+run 'tracked secret audit' scripts/audit-secrets
+run 'unstaged whitespace' git diff --check
+run 'staged whitespace' git diff --cached --check
+
+printf '\nValidation: %d passed, %d failed, %d skipped.\n' "$passed" "$failed" "$skipped"
+((failed == 0))

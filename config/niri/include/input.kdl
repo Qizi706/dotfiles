@@ -1,0 +1,25 @@
+// Input behavior carried over from Hyprland.
+gestures {
+    hot-corners { off; }
+}
+
+input {
+    keyboard {
+        xkb { layout "us"; }
+        repeat-delay 250
+        repeat-rate 50
+    }
+
+    mouse {
+        accel-speed 0.0
+        accel-profile "flat"
+    }
+
+    touchpad {
+        accel-speed 0.0
+        accel-profile "flat"
+    }
+
+    // Hyprland follow_mouse=2 behaved as click-to-focus, which is niri's default.
+    // Deliberately do not enable focus-follows-mouse or warp-mouse-to-focus.
+}

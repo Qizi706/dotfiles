@@ -16,22 +16,22 @@ export PAGER=/usr/bin/less
 export BROWSER=/usr/bin/firefox
 export TERMINAL=ghostty
 
-export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export PARALLEL_HOME="$XDG_CONFIG_HOME/parallel"
 export CALCHISTFILE="$XDG_CACHE_HOME/calc_history"
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME/nv"
 export W3M_DIR="$XDG_STATE_HOME/w3m"
-export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export GOPATH="$XDG_DATA_HOME/go"
 export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_repl_history"
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export PYTHON_HISTORY="$XDG_STATE_HOME/python_history"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
-export GRIM_DEFAULT_DIR="$HOME/tmp"
+export GRIM_DEFAULT_DIR="$HOME/Pictures/Screenshots"
 
+[ -f "$XDG_CONFIG_HOME/readline/inputrc" ] && export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+[ -f "$XDG_CONFIG_HOME/wget/wgetrc" ] && export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+[ -f "$XDG_CONFIG_HOME/npm/npmrc" ] && export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 [ -f "$XDG_CONFIG_HOME/fzf/fzfrc" ] && export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/fzfrc"
 [ -f "$XDG_CONFIG_HOME/gtk-2.0/gtkrc" ] && export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 

@@ -1,0 +1,4 @@
+// zq706: NVIDIA cursor-plane workaround.
+debug {
+    disable-cursor-plane
+}

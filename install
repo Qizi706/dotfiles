@@ -1,15 +1,617 @@
 #!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
+umask 077
 
-CONFIG="install.conf.yaml"
-DOTBOT_DIR="dotbot"
+readonly REPO_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+PROFILE=desktop
+MODE=apply
+HOST_PROFILE=
+HOST_MODE=auto
+BACKUP_ROOT=
+changed=0
+unchanged=0
+problems=0
+detached=0
+cleared_host=0
+cleared_generated=0
 
-DOTBOT_BIN="bin/dotbot"
-BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+usage() {
+    cat <<'EOF'
+Usage: ./install [options]
 
-cd "${BASEDIR}"
-git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
-git submodule update --init --recursive "${DOTBOT_DIR}"
+Create portable dotfile links. Existing conflicting paths are moved to an XDG
+state backup before linking; nothing is deleted.
 
-"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+Options:
+  --profile core|desktop  Install shell-only or full desktop configuration
+                          (default: desktop)
+  --host NAME             Apply hosts/NAME/links.conf after the shared files
+  --no-host               Do not auto-detect a host profile
+  --dry-run               Show changes without writing anything
+  --check                 Verify the selected links without writing anything
+  -h, --help              Show this help
+EOF
+}
+
+while (($#)); do
+    case "$1" in
+        --profile)
+            (($# >= 2)) || { echo "install: --profile needs a value" >&2; exit 2; }
+            PROFILE=$2
+            shift 2
+            ;;
+        --host)
+            (($# >= 2)) || { echo "install: --host needs a value" >&2; exit 2; }
+            HOST_PROFILE=$2
+            HOST_MODE=explicit
+            shift 2
+            ;;
+        --no-host)
+            HOST_PROFILE=
+            HOST_MODE=disabled
+            shift
+            ;;
+        --dry-run)
+            MODE=dry-run
+            shift
+            ;;
+        --check)
+            MODE=check
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "install: unknown option: $1" >&2
+            usage >&2
+            exit 2
+            ;;
+    esac
+done
+
+case "$PROFILE" in
+    core|desktop) ;;
+    *) echo "install: profile must be core or desktop" >&2; exit 2 ;;
+esac
+
+if [[ "$HOST_MODE" == auto ]]; then
+    detected_host=${HOSTNAME:-}
+    if [[ -z "$detected_host" && -r /etc/hostname ]]; then
+        IFS= read -r detected_host </etc/hostname || true
+    fi
+    detected_host=${detected_host%%.*}
+    if [[ -n "$detected_host" && -f "$REPO_DIR/hosts/$detected_host/links.conf" ]]; then
+        HOST_PROFILE=$detected_host
+    fi
+fi
+
+if [[ -n "$HOST_PROFILE" ]]; then
+    [[ "$PROFILE" == desktop ]] || {
+        echo "install: a host compositor profile requires --profile desktop" >&2
+        exit 2
+    }
+    [[ "$HOST_PROFILE" =~ ^[A-Za-z0-9._-]+$ ]] || {
+        echo "install: invalid host profile name: $HOST_PROFILE" >&2
+        exit 2
+    }
+    [[ -f "$REPO_DIR/hosts/$HOST_PROFILE/links.conf" ]] || {
+        echo "install: missing hosts/$HOST_PROFILE/links.conf" >&2
+        exit 2
+    }
+fi
+
+expand_target() {
+    local value=$1 target
+    case "$value" in
+        '~/'*) target=$(realpath -ms -- "$HOME/${value:2}") ;;
+        *)
+            echo "install: target must be a path below ~/: $value" >&2
+            return 1
+            ;;
+    esac
+    case "$target" in
+        "$HOME"/*) printf '%s\n' "$target" ;;
+        *) echo "install: target escapes HOME: $value" >&2; return 1 ;;
+    esac
+}
+
+ensure_backup_root() {
+    [[ -n "$BACKUP_ROOT" ]] && return
+    local state_home=${XDG_STATE_HOME:-"$HOME/.local/state"}
+    BACKUP_ROOT="$state_home/dotfiles/backups/$(date '+%Y%m%d-%H%M%S')-$$"
+    mkdir -p -m 0700 -- "$BACKUP_ROOT"
+    chmod 0700 -- "$BACKUP_ROOT"
+}
+
+backup_path_for() {
+    local target=$1 relative
+    case "$target" in
+        "$HOME"/*) relative=${target#"$HOME"/} ;;
+        *) relative="absolute${target}" ;;
+    esac
+    printf '%s/%s\n' "$BACKUP_ROOT" "$relative"
+}
+
+clear_stale_host_links() {
+    local manifest source_spec target_spec extra target resolved backup line=0
+    manifest=$1
+    while IFS=$'\t' read -r source_spec target_spec extra || [[ -n "${source_spec}${target_spec}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$source_spec" || "$source_spec" == \#* ]] && continue
+        target=$(expand_target "$target_spec") || { ((problems += 1)); continue; }
+        [[ -n ${processed_stale_targets[$target]+present} ]] && continue
+        processed_stale_targets[$target]=1
+        [[ -L "$target" ]] || continue
+        resolved=$(realpath -m -- "$target")
+        case "$resolved" in
+            "$REPO_DIR"/hosts/*)
+                if [[ -n "$HOST_PROFILE" && "$resolved" == "$REPO_DIR/hosts/$HOST_PROFILE/"* ]]; then
+                    continue
+                fi
+                if [[ "$MODE" == check ]]; then
+                    printf 'stale   %s -> %s\n' "$target_spec" "$resolved" >&2
+                    ((problems += 1))
+                elif [[ "$MODE" == dry-run ]]; then
+                    printf 'clear   %s (stale host link)\n' "$target_spec"
+                else
+                    ensure_backup_root
+                    backup=$(backup_path_for "$target")
+                    mkdir -p -- "$(dirname -- "$backup")"
+                    if mv -- "$target" "$backup"; then
+                        printf 'clear   %s -> %s\n' "$target_spec" "$backup"
+                        ((cleared_host += 1))
+                    else
+                        echo "install: failed to back up stale host link $target_spec" >&2
+                        ((problems += 1))
+                    fi
+                fi
+                ;;
+        esac
+    done <"$manifest"
+}
+
+clear_generated_link() {
+    local target_spec=$1 target resolved backup
+    target=$(expand_target "$target_spec") || { ((problems += 1)); return; }
+    [[ -L "$target" ]] || return 0
+    resolved=$(realpath -m -- "$target")
+    case "$resolved" in
+        "$REPO_DIR"|"$REPO_DIR"/*) ;;
+        *) return 0 ;;
+    esac
+
+    if [[ "$MODE" == check ]]; then
+        printf 'stale   %s (generated output points into repository)\n' "$target_spec" >&2
+        ((problems += 1))
+    elif [[ "$MODE" == dry-run ]]; then
+        printf 'clear   %s (generated output link)\n' "$target_spec"
+    else
+        ensure_backup_root
+        backup=$(backup_path_for "$target")
+        mkdir -p -- "$(dirname -- "$backup")"
+        if mv -- "$target" "$backup"; then
+            printf 'clear   %s -> %s\n' "$target_spec" "$backup"
+            ((cleared_generated += 1))
+        else
+            echo "install: failed to back up generated output link $target_spec" >&2
+            ((problems += 1))
+        fi
+    fi
+}
+
+read_generated_links() {
+    local manifest=$1 target extra line=0
+    while IFS=$'\t' read -r target extra || [[ -n "${target}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$target" || "$target" == \#* ]] && continue
+        if [[ -n "$extra" ]]; then
+            echo "install: malformed generated-output entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        clear_generated_link "$target"
+    done <"$manifest"
+}
+
+preflight_generated_links() {
+    local manifest=$1 target extra line=0
+    while IFS=$'\t' read -r target extra || [[ -n "${target}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$target" || "$target" == \#* ]] && continue
+        if [[ -n "$extra" ]]; then
+            echo "install: malformed generated-output entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        expand_target "$target" >/dev/null || ((problems += 1))
+    done <"$manifest"
+}
+
+migrate_legacy_directory() {
+    local target_spec=$1 target resolved relative backup
+    target=$(expand_target "$target_spec") || { ((problems += 1)); return; }
+    [[ -L "$target" ]] || return 0
+
+    resolved=$(realpath -m -- "$target")
+    case "$resolved" in
+        "$REPO_DIR"|"$REPO_DIR"/*) ;;
+        *) return 0 ;;
+    esac
+
+    if [[ "$MODE" == check ]]; then
+        printf 'legacy  %s (run ./install to detach runtime state)\n' "$target_spec" >&2
+        ((problems += 1))
+        return
+    fi
+    if [[ "$MODE" == dry-run ]]; then
+        printf 'detach  %s (preserve contents, replace directory link)\n' "$target_spec"
+        return
+    fi
+
+    ensure_backup_root
+    relative=${target#"$HOME"/}
+    backup="$BACKUP_ROOT/.legacy-links/$relative"
+    mkdir -p -- "$(dirname -- "$backup")"
+    if ! mv -- "$target" "$backup"; then
+        echo "install: failed to back up legacy link $target_spec" >&2
+        ((problems += 1))
+        return
+    fi
+    if ! mkdir -p -- "$target" || { [[ -d "$resolved" ]] && ! cp -a -- "$resolved/." "$target/"; }; then
+        rm -rf -- "$target"
+        mv -- "$backup" "$target"
+        echo "install: failed to detach $target_spec; original link restored" >&2
+        ((problems += 1))
+        return
+    fi
+    printf 'detach  %s (old link: %s)\n' "$target_spec" "$backup"
+    ((detached += 1))
+}
+
+ensure_directory() {
+    local mode=$1 target_spec=$2 target actual_mode
+    target=$(expand_target "$target_spec") || { ((problems += 1)); return; }
+
+    if [[ "$MODE" == check ]]; then
+        actual_mode=$(stat -c '%a' -- "$target" 2>/dev/null || true)
+        if [[ -d "$target" && "$actual_mode" == "${mode#0}" ]]; then
+            printf 'ok      directory %s\n' "$target_spec"
+        else
+            printf 'wrong   directory %s (expected mode %s, got %s)\n' "$target_spec" "$mode" "${actual_mode:-missing}" >&2
+            ((problems += 1))
+        fi
+        return
+    fi
+
+    if [[ "$MODE" == dry-run ]]; then
+        if [[ ! -d "$target" ]]; then
+            printf 'mkdir   %s (mode %s)\n' "$target_spec" "$mode"
+        else
+            actual_mode=$(stat -c '%a' -- "$target" 2>/dev/null || true)
+            [[ "$actual_mode" == "${mode#0}" ]] || printf 'chmod   %s (mode %s, currently %s)\n' "$target_spec" "$mode" "${actual_mode:-unknown}"
+        fi
+        return
+    fi
+
+    mkdir -p -- "$target"
+    chmod "$mode" -- "$target"
+}
+
+install_link() {
+    local source_spec=$1 target_spec=$2 source target parent parent_logical parent_resolved backup
+    source=$(realpath -m -- "$REPO_DIR/$source_spec")
+    target=$(expand_target "$target_spec") || { ((problems += 1)); return; }
+
+    case "$source" in
+        "$REPO_DIR"/*) ;;
+        *) echo "install: source escapes repository: $source_spec" >&2; ((problems += 1)); return ;;
+    esac
+    if [[ ! -e "$source" ]]; then
+        echo "install: missing source: $source_spec" >&2
+        ((problems += 1))
+        return
+    fi
+
+    # `-ef` also recognizes a file reached through one of the old whole-directory
+    # symlinks. This avoids unlinking the repository source through that alias.
+    if [[ -L "$target" && "$(realpath -m -- "$target")" == "$source" ]]; then
+        printf 'ok      %s\n' "$target_spec"
+        ((unchanged += 1))
+        return
+    fi
+
+    if [[ "$MODE" == check ]]; then
+        if [[ -e "$target" || -L "$target" ]]; then
+            printf 'wrong   %s\n' "$target_spec" >&2
+        else
+            printf 'missing %s\n' "$target_spec" >&2
+        fi
+        ((problems += 1))
+        return
+    fi
+
+    if [[ "$MODE" == dry-run ]]; then
+        if [[ -e "$target" || -L "$target" ]]; then
+            printf 'backup  %s\n' "$target_spec"
+        fi
+        printf 'link    %s -> %s\n' "$target_spec" "$source_spec"
+        return
+    fi
+
+    parent=$(dirname -- "$target")
+    parent_logical=$(realpath -ms -- "$parent")
+    parent_resolved=$(realpath -m -- "$parent")
+    if [[ "$parent_resolved" != "$parent_logical" ]]; then
+        echo "install: refusing to replace a different file through a parent-directory symlink: $target_spec" >&2
+        ((problems += 1))
+        return
+    fi
+
+    if [[ -e "$target" || -L "$target" ]]; then
+        ensure_backup_root
+        backup=$(backup_path_for "$target")
+        mkdir -p -- "$(dirname -- "$backup")"
+        if ! mv -- "$target" "$backup"; then
+            echo "install: failed to back up $target_spec" >&2
+            ((problems += 1))
+            return
+        fi
+        printf 'backup  %s -> %s\n' "$target_spec" "$backup"
+    fi
+
+    if ! mkdir -p -- "$parent" || ! ln -s -- "$source" "$target"; then
+        if [[ -n "${backup:-}" && ( -e "$backup" || -L "$backup" ) ]]; then
+            [[ -e "$target" || -L "$target" ]] && rm -rf -- "$target"
+            mv -- "$backup" "$target"
+            echo "install: failed to link $target_spec; original target restored" >&2
+        else
+            echo "install: failed to link $target_spec" >&2
+        fi
+        ((problems += 1))
+        return
+    fi
+    printf 'link    %s -> %s\n' "$target_spec" "$source_spec"
+    ((changed += 1))
+}
+
+read_directories() {
+    local manifest=$1 mode target extra line=0
+    while IFS=$'\t' read -r mode target extra || [[ -n "${mode}${target}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$mode" || "$mode" == \#* ]] && continue
+        if [[ -z "$target" || -n "$extra" || ! "$mode" =~ ^0?[0-7]{3}$ ]]; then
+            echo "install: malformed directory entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        ensure_directory "$mode" "$target"
+    done <"$manifest"
+}
+
+read_legacy_directories() {
+    local manifest=$1 target extra line=0
+    while IFS=$'\t' read -r target extra || [[ -n "${target}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$target" || "$target" == \#* ]] && continue
+        if [[ -n "$extra" ]]; then
+            echo "install: malformed legacy directory entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        migrate_legacy_directory "$target"
+    done <"$manifest"
+}
+
+read_links() {
+    local manifest=$1 source target extra line=0
+    while IFS=$'\t' read -r source target extra || [[ -n "${source}${target}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$source" || "$source" == \#* ]] && continue
+        if [[ -z "$target" || -n "$extra" ]]; then
+            echo "install: malformed link entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        install_link "$source" "$target"
+    done <"$manifest"
+}
+
+preflight_directories() {
+    local manifest=$1 mode target_spec extra target target_logical target_resolved line=0
+    while IFS=$'\t' read -r mode target_spec extra || [[ -n "${mode}${target_spec}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$mode" || "$mode" == \#* ]] && continue
+        if [[ -z "$target_spec" || -n "$extra" || ! "$mode" =~ ^0?[0-7]{3}$ ]]; then
+            echo "install: malformed directory entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        target=$(expand_target "$target_spec") || { ((problems += 1)); continue; }
+        target_logical=$(realpath -ms -- "$target")
+        target_resolved=$(realpath -m -- "$target")
+        if [[ "$target_resolved" != "$target_logical" ]] && ! legacy_detachment_covers "$target"; then
+            echo "install: directory target crosses an unmanaged symlink: $manifest:$line: $target_spec" >&2
+            ((problems += 1))
+        fi
+    done <"$manifest"
+}
+
+preflight_legacy_directories() {
+    local manifest=$1 target extra line=0
+    while IFS=$'\t' read -r target extra || [[ -n "${target}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$target" || "$target" == \#* ]] && continue
+        if [[ -n "$extra" ]]; then
+            echo "install: malformed legacy directory entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        expand_target "$target" >/dev/null || ((problems += 1))
+    done <"$manifest"
+}
+
+legacy_detachment_covers() {
+    local candidate=$1 legacy_spec legacy_path legacy_resolved
+    for legacy_spec in "${selected_legacy_targets[@]}"; do
+        legacy_path=$(expand_target "$legacy_spec") || continue
+        if [[ "$candidate" == "$legacy_path" || "$candidate" == "$legacy_path"/* ]]; then
+            # migrate_legacy_directory only detaches an actual symlink whose
+            # destination belongs to this checkout. Do not let preflight
+            # promise a detach for a regular directory or an unrelated link.
+            [[ -L "$legacy_path" ]] || continue
+            legacy_resolved=$(realpath -m -- "$legacy_path")
+            case "$legacy_resolved" in
+                "$REPO_DIR"|"$REPO_DIR"/*) return 0 ;;
+            esac
+        fi
+    done
+    return 1
+}
+
+preflight_links() {
+    local manifest=$1 source_spec target_spec extra source target parent parent_logical parent_resolved line=0
+    while IFS=$'\t' read -r source_spec target_spec extra || [[ -n "${source_spec}${target_spec}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$source_spec" || "$source_spec" == \#* ]] && continue
+        if [[ -z "$target_spec" || -n "$extra" ]]; then
+            echo "install: malformed link entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        source=$(realpath -m -- "$REPO_DIR/$source_spec")
+        case "$source" in
+            "$REPO_DIR"/*) ;;
+            *) echo "install: source escapes repository: $manifest:$line: $source_spec" >&2; ((problems += 1)); continue ;;
+        esac
+        if [[ ! -e "$source" ]]; then
+            echo "install: missing source: $manifest:$line: $source_spec" >&2
+            ((problems += 1))
+        fi
+        target=$(expand_target "$target_spec") || { ((problems += 1)); continue; }
+        if [[ ! -L "$target" || "$(realpath -m -- "$target")" != "$source" ]]; then
+            parent=$(dirname -- "$target")
+            parent_logical=$(realpath -ms -- "$parent")
+            parent_resolved=$(realpath -m -- "$parent")
+            if [[ "$parent_resolved" != "$parent_logical" ]]; then
+                if ! legacy_detachment_covers "$target"; then
+                    echo "install: parent-directory symlink must be listed for legacy detachment: $manifest:$line: $target_spec" >&2
+                    ((problems += 1))
+                fi
+            fi
+        fi
+        if [[ -n ${seen_targets[$target]+present} ]]; then
+            echo "install: duplicate target: $manifest:$line: $target_spec" >&2
+            ((problems += 1))
+        else
+            seen_targets[$target]="$manifest:$line"
+        fi
+    done <"$manifest"
+}
+
+preflight_stale_host_links() {
+    local manifest=$1 source_spec target_spec extra line=0
+    while IFS=$'\t' read -r source_spec target_spec extra || [[ -n "${source_spec}${target_spec}${extra}" ]]; do
+        ((line += 1))
+        [[ -z "$source_spec" || "$source_spec" == \#* ]] && continue
+        if [[ -z "$target_spec" || -n "$extra" ]]; then
+            echo "install: malformed stale host entry: $manifest:$line" >&2
+            ((problems += 1))
+            continue
+        fi
+        expand_target "$target_spec" >/dev/null || ((problems += 1))
+    done <"$manifest"
+}
+
+manifests=("$REPO_DIR/manifests/core.links")
+legacy_manifests=("$REPO_DIR/manifests/legacy-core.conf")
+directory_manifests=("$REPO_DIR/manifests/directories-core.conf")
+if [[ "$PROFILE" == desktop ]]; then
+    manifests+=("$REPO_DIR/manifests/desktop.links")
+    legacy_manifests+=("$REPO_DIR/manifests/legacy-desktop.conf")
+    directory_manifests+=("$REPO_DIR/manifests/directories-desktop.conf")
+fi
+if [[ -n "$HOST_PROFILE" ]]; then
+    # Install host-local includes before compositor entrypoints. This prevents a
+    # live Niri reload from observing an incomplete local overlay.
+    manifests=("$REPO_DIR/hosts/$HOST_PROFILE/links.conf" "${manifests[@]}")
+fi
+stale_host_manifests=()
+generated_manifest=
+if [[ "$PROFILE" == desktop ]]; then
+    # Every host manifest may name different targets. The clear routine checks
+    # the resolved owner and leaves links for the selected host untouched.
+    while IFS= read -r host_manifest; do stale_host_manifests+=("$host_manifest"); done \
+        < <(find "$REPO_DIR/hosts" -mindepth 2 -maxdepth 2 -type f -name links.conf -print | sort)
+    generated_manifest="$REPO_DIR/manifests/generated-runtime.conf"
+fi
+
+# Validate every selected manifest before the first filesystem mutation.
+declare -A seen_targets=()
+selected_legacy_targets=()
+for manifest in "${legacy_manifests[@]}"; do
+    while IFS=$'\t' read -r legacy_spec extra || [[ -n "${legacy_spec}${extra}" ]]; do
+        [[ -z "$legacy_spec" || "$legacy_spec" == \#* || -n "$extra" ]] && continue
+        selected_legacy_targets+=("$legacy_spec")
+    done <"$manifest"
+done
+for manifest in "${legacy_manifests[@]}"; do
+    preflight_legacy_directories "$manifest"
+done
+for manifest in "${directory_manifests[@]}"; do
+    preflight_directories "$manifest"
+done
+for manifest in "${manifests[@]}"; do
+    preflight_links "$manifest"
+done
+for manifest in "${stale_host_manifests[@]}"; do
+    preflight_stale_host_links "$manifest"
+done
+if [[ -n "$generated_manifest" ]]; then
+    preflight_generated_links "$generated_manifest"
+fi
+if ((problems)); then
+    printf '\ninstall: %d manifest problem(s) found; nothing was changed.\n' "$problems" >&2
+    exit 1
+fi
+
+for manifest in "${legacy_manifests[@]}"; do
+    read_legacy_directories "$manifest"
+done
+for manifest in "${directory_manifests[@]}"; do
+    read_directories "$manifest"
+done
+declare -A processed_stale_targets=()
+for manifest in "${stale_host_manifests[@]}"; do
+    clear_stale_host_links "$manifest"
+done
+if [[ -n "$generated_manifest" ]]; then
+    read_generated_links "$generated_manifest"
+fi
+for manifest in "${manifests[@]}"; do
+    read_links "$manifest"
+done
+
+if ((problems)); then
+    printf '\ninstall: %d runtime problem(s) found. Earlier successful changes remain recoverable from backup.\n' "$problems" >&2
+    [[ -n "$BACKUP_ROOT" ]] && printf 'Backup: %s\n' "$BACKUP_ROOT" >&2
+    exit 1
+fi
+
+if [[ "$MODE" == apply ]]; then
+    if [[ "$PROFILE" == desktop && -n "${NIRI_SOCKET:-}" && $(command -v niri 2>/dev/null || true) ]]; then
+        if niri msg action load-config-file >/dev/null 2>&1; then
+            printf 'reload  current Niri configuration\n'
+        else
+            printf 'warning current Niri configuration could not be reloaded; run: niri msg action load-config-file\n' >&2
+        fi
+    fi
+    printf '\ninstall: complete (%d linked, %d stale host links cleared, %d generated links cleared, %d legacy directories detached, %d already managed)' "$changed" "$cleared_host" "$cleared_generated" "$detached" "$unchanged"
+    [[ -n "$HOST_PROFILE" ]] && printf ', host=%s' "$HOST_PROFILE"
+    printf '.\n'
+    if [[ -n "$BACKUP_ROOT" ]]; then
+        printf 'Backup: %s\n' "$BACKUP_ROOT"
+    fi
+fi

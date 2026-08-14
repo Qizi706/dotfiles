@@ -1,0 +1,461 @@
+#!/usr/bin/env bash
+
+# Read-only dependency audit for this repository's Arch Linux package manifests.
+# This script only reads pacman's local package and sync databases. It never
+# installs, removes, refreshes, or upgrades packages and never invokes an AUR
+# helper.
+
+set -uo pipefail
+
+readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPO_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+readonly OFFICIAL_MANIFEST="${REPO_DIR}/packages/arch-official.txt"
+readonly AUR_MANIFEST="${REPO_DIR}/packages/arch-aur.txt"
+
+show_optional=true
+profile=desktop
+
+usage() {
+  cat <<'EOF'
+Usage: scripts/check-deps [--profile core|desktop] [--required-only]
+
+Read the Arch package manifests and report local dependency/provider state.
+
+Options:
+  --profile NAME    Audit core shell dependencies or the full desktop set
+                    (default: desktop).
+  --required-only  Skip the informational optional-package report.
+  -h, --help       Show this help text.
+
+Exit status:
+  0  All required runtime dependencies are satisfied. Migration warnings may
+     still be present.
+  1  One or more required dependencies are missing or conflicting.
+  2  The checker could not parse its manifests or inspect pacman's databases.
+
+The script is read-only: it does not run pacman -S, refresh databases, invoke
+sudo, or call an AUR helper.
+EOF
+}
+
+while (($# > 0)); do
+  case "$1" in
+    --profile)
+      if (($# < 2)); then
+        printf 'check-deps: --profile needs a value\n' >&2
+        exit 2
+      fi
+      profile=$2
+      shift
+      ;;
+    --required-only)
+      show_optional=false
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    *)
+      printf 'check-deps: unknown option: %s\n' "$1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+case "$profile" in
+  core | desktop) ;;
+  *) printf 'check-deps: profile must be core or desktop\n' >&2; exit 2 ;;
+esac
+
+if ! command -v pacman >/dev/null 2>&1; then
+  printf '[ERROR] pacman is unavailable; this checker supports Arch Linux only.\n' >&2
+  exit 2
+fi
+
+declare -a official_required=()
+declare -a official_optional=()
+declare -a aur_required=()
+declare -a aur_optional=()
+declare -A manifest_seen=()
+manifest_error_count=0
+
+trim_whitespace() {
+  local value=$1
+  value="${value#"${value%%[![:space:]]*}"}"
+  value="${value%"${value##*[![:space:]]}"}"
+  printf '%s' "$value"
+}
+
+read_manifest() {
+  local manifest=$1
+  local required_name=$2
+  local optional_name=$3
+  local -n required_ref=$required_name
+  local -n optional_ref=$optional_name
+  local raw line section=''
+  local line_number=0
+
+  if [[ ! -r $manifest ]]; then
+    printf '[ERROR] Manifest is not readable: %s\n' "$manifest" >&2
+    ((manifest_error_count += 1))
+    return
+  fi
+
+  while IFS= read -r raw || [[ -n $raw ]]; do
+    ((line_number += 1))
+
+    if [[ $raw =~ ^[[:space:]]*#[[:space:]]*@required[[:space:]]*$ ]]; then
+      section=required
+      continue
+    fi
+    if [[ $raw =~ ^[[:space:]]*#[[:space:]]*@optional[[:space:]]*$ ]]; then
+      section=optional
+      continue
+    fi
+
+    line=${raw%%#*}
+    line=$(trim_whitespace "$line")
+    [[ -z $line ]] && continue
+
+    if [[ -z $section ]]; then
+      printf '[ERROR] %s:%d: package appears before an @required or @optional marker.\n' \
+        "$manifest" "$line_number" >&2
+      ((manifest_error_count += 1))
+      continue
+    fi
+
+    if [[ ! $line =~ ^[[:alnum:]][[:alnum:]@._+:-]*$ ]]; then
+      printf '[ERROR] %s:%d: invalid package name: %s\n' \
+        "$manifest" "$line_number" "$line" >&2
+      ((manifest_error_count += 1))
+      continue
+    fi
+
+    if [[ -n ${manifest_seen[$line]+present} ]]; then
+      printf '[ERROR] %s:%d: duplicate package entry: %s\n' \
+        "$manifest" "$line_number" "$line" >&2
+      ((manifest_error_count += 1))
+      continue
+    fi
+    manifest_seen[$line]="${manifest}:${line_number}"
+
+    if [[ $section == required ]]; then
+      required_ref+=("$line")
+    else
+      optional_ref+=("$line")
+    fi
+  done <"$manifest"
+}
+
+read_manifest "$OFFICIAL_MANIFEST" official_required official_optional
+read_manifest "$AUR_MANIFEST" aur_required aur_optional
+
+if [[ $profile == core ]]; then
+  core_packages=(bash bat fish fzf gawk git gnupg less neovim npm openssh starship tmux uv wget zoxide zsh)
+  declare -A core_package_set=()
+  for package in "${core_packages[@]}"; do core_package_set[$package]=1; done
+  filtered=()
+  for package in "${official_required[@]}"; do
+    [[ -n ${core_package_set[$package]+present} ]] && filtered+=("$package")
+  done
+  official_required=("${filtered[@]}")
+  official_optional=()
+  aur_required=()
+  aur_optional=(oh-my-zsh-git tmux-plugin-manager)
+fi
+
+if ((manifest_error_count > 0)); then
+  printf '[ERROR] Found %d manifest error(s); dependency checks were not run.\n' \
+    "$manifest_error_count" >&2
+  exit 2
+fi
+
+declare -A installed_exact=()
+declare -A installed_version=()
+declare -A providers=()
+
+append_provider() {
+  local capability=$1
+  local package=$2
+  local current=${providers[$capability]-}
+
+  [[ -z $capability ]] && return
+  case ",${current}," in
+    *",${package},"*) ;;
+    *)
+      if [[ -n $current ]]; then
+        providers[$capability]="${current},${package}"
+      else
+        providers[$capability]=$package
+      fi
+      ;;
+  esac
+}
+
+load_local_package_db() {
+  local desc line section package version capability
+  local -a descriptions=(/var/lib/pacman/local/*/desc)
+
+  if ((${#descriptions[@]} == 0)) || [[ ! -e ${descriptions[0]} ]]; then
+    printf '[ERROR] pacman local database is unavailable.\n' >&2
+    return 1
+  fi
+
+  for desc in "${descriptions[@]}"; do
+    [[ -r $desc ]] || continue
+    section=''
+    package=''
+    version=''
+
+    while IFS= read -r line || [[ -n $line ]]; do
+      case "$line" in
+        '%NAME%')
+          section=name
+          continue
+          ;;
+        '%VERSION%')
+          section=version
+          continue
+          ;;
+        '%PROVIDES%')
+          section=provides
+          continue
+          ;;
+        %*%)
+          section=''
+          continue
+          ;;
+        '')
+          continue
+          ;;
+      esac
+
+      case "$section" in
+        name)
+          package=$line
+          installed_exact[$package]=1
+          append_provider "$package" "$package"
+          section=''
+          ;;
+        version)
+          version=$line
+          [[ -n $package ]] && installed_version[$package]=$version
+          section=''
+          ;;
+        provides)
+          [[ $line == None ]] && continue
+          capability=${line%%[=<>]*}
+          [[ -n $package ]] && append_provider "$capability" "$package"
+          ;;
+      esac
+    done <"$desc"
+  done
+}
+
+if ! load_local_package_db; then
+  exit 2
+fi
+
+is_satisfied() {
+  pacman -T "$1" >/dev/null 2>&1
+}
+
+provider_description() {
+  local requirement=$1
+  local provider_list=${providers[$requirement]-}
+  local provider version result=''
+  local -a provider_array=()
+
+  if [[ -z $provider_list ]]; then
+    printf 'installed provider'
+    return
+  fi
+
+  IFS=',' read -r -a provider_array <<<"$provider_list"
+  for provider in "${provider_array[@]}"; do
+    version=${installed_version[$provider]-unknown}
+    if [[ -n $result ]]; then
+      result+=', '
+    fi
+    result+="${provider} ${version}"
+  done
+  printf '%s' "$result"
+}
+
+declare -A sync_repositories=()
+
+load_sync_metadata() {
+  local line repository=''
+
+  while IFS= read -r line || [[ -n $line ]]; do
+    if [[ $line =~ ^Repository[[:space:]]*:[[:space:]]*(.+)$ ]]; then
+      repository=${BASH_REMATCH[1]}
+    elif [[ $line =~ ^Name[[:space:]]*:[[:space:]]*(.+)$ ]]; then
+      sync_repositories[${BASH_REMATCH[1]}]=$repository
+    fi
+  done < <(
+    LC_ALL=C pacman -Si "${official_required[@]}" "${official_optional[@]}" \
+      2>/dev/null || true
+  )
+}
+
+is_arch_official_repo() {
+  case "$1" in
+    core | extra | multilib | core-testing | extra-testing | multilib-testing | \
+      gnome-unstable | kde-unstable)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+missing_required=0
+metadata_warnings=0
+migration_warnings=0
+
+validate_official_metadata() {
+  local package repo
+  local -A checked=()
+
+  for package in "${official_required[@]}" "${official_optional[@]}"; do
+    [[ -n ${checked[$package]+present} ]] && continue
+    checked[$package]=1
+    repo=${sync_repositories[$package]-}
+    if [[ -z $repo ]]; then
+      printf '[WARN] %-28s not found in the local sync databases.\n' "$package"
+      ((metadata_warnings += 1))
+    elif ! is_arch_official_repo "$repo"; then
+      printf '[WARN] %-28s resolves to non-official repository %s.\n' "$package" "$repo"
+      ((metadata_warnings += 1))
+    fi
+  done
+}
+
+check_dependency_group() {
+  local title=$1
+  local required=$2
+  local skip_dms=$3
+  shift 3
+  local package
+
+  printf '\n%s\n' "$title"
+  for package in "$@"; do
+    if [[ $skip_dms == true ]]; then
+      case "$package" in
+        dms-shell | dms-shell-hyprland | dms-shell-niri)
+          continue
+          ;;
+      esac
+    fi
+
+    if is_satisfied "$package"; then
+      printf '[OK]   %-28s <- %s\n' "$package" "$(provider_description "$package")"
+    elif [[ $required == true ]]; then
+      printf '[MISS] %-28s required\n' "$package"
+      ((missing_required += 1))
+    else
+      printf '[OPT]  %-28s not installed\n' "$package"
+    fi
+  done
+}
+
+check_dms_state() {
+  local legacy=false
+  local stable_base=false
+  local stable_hypr=false
+  local stable_niri=false
+
+  [[ -n ${installed_exact[dms-shell-git]+present} ]] && legacy=true
+  [[ -n ${installed_exact[dms-shell]+present} ]] && stable_base=true
+  [[ -n ${installed_exact[dms-shell-hyprland]+present} ]] && stable_hypr=true
+  [[ -n ${installed_exact[dms-shell-niri]+present} ]] && stable_niri=true
+
+  printf '\nDMS provider\n'
+  if [[ $legacy == true ]]; then
+    if [[ $stable_base == true || $stable_hypr == true || $stable_niri == true ]]; then
+      printf '[ERROR] dms-shell-git is mixed with stable DMS packages. These package families conflict.\n'
+      ((missing_required += 1))
+      return
+    fi
+
+    printf '[WARN] dms-shell-git %s currently provides the working dms runtime.\n' \
+      "${installed_version[dms-shell-git]-unknown}"
+    printf '       Stable migration target: dms-shell + dms-shell-hyprland + dms-shell-niri.\n'
+    printf '       Review removal/replacement as one transaction; this checker performs no migration.\n'
+    ((migration_warnings += 1))
+    return
+  fi
+
+  for package in dms-shell dms-shell-hyprland dms-shell-niri; do
+    if [[ -n ${installed_exact[$package]+present} ]]; then
+      printf '[OK]   %-28s <- %s %s\n' \
+        "$package" "$package" "${installed_version[$package]-unknown}"
+    else
+      printf '[MISS] %-28s required stable DMS component\n' "$package"
+      ((missing_required += 1))
+    fi
+  done
+}
+
+audit_command_ownership() {
+  local command_name path owner
+  local printed_header=false
+
+  for command_name in uv grimblast; do
+    path=$(command -v "$command_name" 2>/dev/null || true)
+    [[ -z $path ]] && continue
+
+    owner=$(pacman -Qoq "$path" 2>/dev/null || true)
+    if [[ -z $owner ]]; then
+      if [[ $printed_header == false ]]; then
+        printf '\nCommand ownership\n'
+        printed_header=true
+      fi
+      printf '[WARN] %s exists at %s but is not owned by a package.\n' \
+        "$command_name" "$path"
+    fi
+  done
+}
+
+printf 'Arch dependency audit (read-only)\n'
+printf 'Repository: %s\n' "$REPO_DIR"
+printf 'Profile: %s\n' "$profile"
+
+load_sync_metadata
+validate_official_metadata
+check_dependency_group 'Official required packages' true true "${official_required[@]}"
+if [[ $profile == desktop ]]; then
+  check_dms_state
+fi
+check_dependency_group 'AUR/non-official required packages' true false "${aur_required[@]}"
+
+if [[ $show_optional == true ]]; then
+  check_dependency_group 'Official optional packages' false false "${official_optional[@]}"
+  if ((${#aur_optional[@]} > 0)); then
+    check_dependency_group 'AUR/non-official optional packages' false false "${aur_optional[@]}"
+  fi
+fi
+
+if [[ $profile == desktop ]]; then
+  audit_command_ownership
+else
+  # uv is part of the core shell profile; grimblast is desktop-only.
+  path=$(command -v uv 2>/dev/null || true)
+  if [[ -n $path && -z $(pacman -Qoq "$path" 2>/dev/null || true) ]]; then
+    printf '\nCommand ownership\n[WARN] uv exists at %s but is not owned by a package.\n' "$path"
+  fi
+fi
+
+printf '\nSummary\n'
+printf '  missing required: %d\n' "$missing_required"
+printf '  migration warnings: %d\n' "$migration_warnings"
+printf '  sync metadata warnings: %d\n' "$metadata_warnings"
+
+if ((missing_required > 0)); then
+  exit 1
+fi
+exit 0

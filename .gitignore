@@ -1,30 +1,58 @@
-config/QQ/
-config/fcitx5/conf/cached_layouts
-config/ibus/
+# Editors and operating-system debris
+*.swp
+*.swo
+*~
+.DS_Store
+/tmux-*.log
 
-# Credentials, identity stores, and application runtime state must never be
-# added to this public dotfiles repository.
+# Host-local overlays are deployed from hosts/<name>; never write them back
+# into the shared compositor trees.
+config/niri/local/
+config/hypr/local/
+hosts/*/private/
+private/
+
+# Credentials, keys, identity databases, and browser profiles
 etc/
 mozilla/
+ssh/*
+!ssh/config
+gnupg/*
+!gnupg/common.conf
+config/pulse/
+config/nvim/
+
+# Application state, generated data, caches, logs, and downloaded plugins
 config/Code*/
+config/QQ/
 config/DankMaterialShell/plugins/
 config/DankMaterialShell/plugin_settings.json
 config/DankMaterialShell/settings.json
+config/DankMaterialShell/firefox.css
 config/QtProject.conf
 config/dconf/
 config/fcitx/
+config/fcitx5/conf/cached_layouts
 config/fish/conf.d/*.bak
+config/fish/fish_variables*
+config/foot/dank-colors.ini
+config/fontconfig/*.bak
 config/go/
 config/gtk-3.0/assets
+config/gtk-3.0/dank-colors.css
+config/gtk-4.0/dank-colors.css
 config/hypr/.dms-backups/
 config/io.github.clash-verge-rev.clash-verge-rev/
 config/looking-glass/imgui.ini
+config/alacritty/dank-theme.toml
+config/ghostty/themes/dankcolors
+config/kitty/dank-tabs.conf
+config/kitty/dank-theme.conf
+config/kitty/current-theme.conf
+config/qt5ct/colors/matugen.conf
+config/qt6ct/colors/matugen.conf
 config/niri/dms/
-config/nvim/
 config/obs-studio/
-config/pulse/
-config/fish/fish_variables*
-config/fontconfig/*.bak
 config/tmux/plugins/
 config/tmux/*.log
 config/vlc/vlc-qt-interface.conf

@@ -21,21 +21,30 @@ set -gx BROWSER /usr/bin/firefox
 set -gx TERMINAL ghostty
 
 # Tool and application data locations.
-set -gx INPUTRC "$XDG_CONFIG_HOME/readline/inputrc"
 set -gx PARALLEL_HOME "$XDG_CONFIG_HOME/parallel"
 set -gx CALCHISTFILE "$XDG_CACHE_HOME/calc_history"
 set -gx CUDA_CACHE_PATH "$XDG_CACHE_HOME/nv"
 set -gx W3M_DIR "$XDG_STATE_HOME/w3m"
-set -gx WGETRC "$XDG_CONFIG_HOME/wget/wgetrc"
 set -gx ANDROID_SDK_HOME "$XDG_CONFIG_HOME/android"
 set -gx CARGO_HOME "$XDG_DATA_HOME/cargo"
 set -gx GOPATH "$XDG_DATA_HOME/go"
 set -gx GOMODCACHE "$XDG_CACHE_HOME/go/mod"
 set -gx NODE_REPL_HISTORY "$XDG_STATE_HOME/node_repl_history"
-set -gx NPM_CONFIG_USERCONFIG "$XDG_CONFIG_HOME/npm/npmrc"
 set -gx PYTHON_HISTORY "$XDG_STATE_HOME/python_history"
 set -gx GRADLE_USER_HOME "$XDG_DATA_HOME/gradle"
-set -gx GRIM_DEFAULT_DIR "$HOME/tmp"
+set -gx GRIM_DEFAULT_DIR "$HOME/Pictures/Screenshots"
+
+if test -f "$XDG_CONFIG_HOME/readline/inputrc"
+    set -gx INPUTRC "$XDG_CONFIG_HOME/readline/inputrc"
+end
+
+if test -f "$XDG_CONFIG_HOME/wget/wgetrc"
+    set -gx WGETRC "$XDG_CONFIG_HOME/wget/wgetrc"
+end
+
+if test -f "$XDG_CONFIG_HOME/npm/npmrc"
+    set -gx NPM_CONFIG_USERCONFIG "$XDG_CONFIG_HOME/npm/npmrc"
+end
 
 if test -f "$XDG_CONFIG_HOME/fzf/fzfrc"
     set -gx FZF_DEFAULT_OPTS_FILE "$XDG_CONFIG_HOME/fzf/fzfrc"
@@ -70,10 +79,17 @@ fish_add_path --global --append \
 set -l session_data_dirs
 for data_dir in "$HOME/.local/share/flatpak/exports/share" /var/lib/flatpak/exports/share
     if test -d "$data_dir"
-        set --append session_data_dirs "$data_dir"
+        contains -- "$data_dir" $session_data_dirs; or set --append session_data_dirs "$data_dir"
     end
 end
-set --append session_data_dirs /usr/local/share /usr/share
+if set -q XDG_DATA_DIRS
+    for data_dir in (string split : -- $XDG_DATA_DIRS)
+        test -n "$data_dir"; and not contains -- "$data_dir" $session_data_dirs; and set --append session_data_dirs "$data_dir"
+    end
+end
+for data_dir in /usr/local/share /usr/share
+    contains -- "$data_dir" $session_data_dirs; or set --append session_data_dirs "$data_dir"
+end
 set -gx XDG_DATA_DIRS (string join : $session_data_dirs)
 
 if test -x /usr/bin/bat

@@ -1,0 +1,6 @@
+// niri-session exports the Wayland/systemd environment itself, so the old
+// dbus-update-activation-environment command is intentionally omitted.
+// DMS is enabled as a graphical-session user service and provides the
+// PolicyKit agent. Fcitx 5 uses the system XDG autostart entry.
+spawn-sh-at-startup "wl-paste --watch cliphist store"
+spawn-sh-at-startup "echo 'Xft.dpi:103' | xrdb -merge"

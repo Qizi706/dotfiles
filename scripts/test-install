@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+readonly SOURCE_REPO="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+readonly TEST_ROOT="$(mktemp -d /tmp/dotfiles-install-test.XXXXXX)"
+trap 'rm -rf -- "$TEST_ROOT"' EXIT
+
+pass=0
+fail() { printf 'FAIL  %s\n' "$*" >&2; exit 1; }
+ok() { printf 'PASS  %s\n' "$*"; ((pass += 1)); }
+
+make_repo() {
+    local destination=$1
+    mkdir -p -- "$destination"
+    find "$SOURCE_REPO" -mindepth 1 -maxdepth 1 ! -name .git \
+        -exec cp -a -t "$destination" -- {} +
+}
+
+run_install() {
+    local home=$1 repo=$2
+    shift 2
+    HOME="$home" XDG_STATE_HOME="$home/.local/state" NIRI_SOCKET= "$repo/install" "$@"
+}
+
+# Empty HOME: apply, strict links, modes, and idempotent check.
+empty_repo="$TEST_ROOT/empty-repo"
+empty_home="$TEST_ROOT/empty-home"
+make_repo "$empty_repo"
+mkdir -p -- "$empty_home/.ssh"
+chmod 0755 "$empty_home/.ssh"
+run_install "$empty_home" "$empty_repo" --profile desktop --host zq706 --dry-run >"$TEST_ROOT/empty-dry.out"
+grep -Fq 'chmod   ~/.ssh (mode 0700, currently 755)' "$TEST_ROOT/empty-dry.out" || fail 'dry-run omitted directory permission change'
+run_install "$empty_home" "$empty_repo" --profile desktop --host zq706 >/dev/null
+run_install "$empty_home" "$empty_repo" --profile desktop --host zq706 --check >/dev/null
+[[ -L "$empty_home/.config/niri/config.kdl" ]] || fail 'empty install did not create a strict Niri symlink'
+[[ $(stat -c %a "$empty_home/.ssh") == 700 && $(stat -c %a "$empty_home/.gnupg") == 700 ]] || fail 'private directory modes'
+ok 'empty apply/check, dry-run, and private directory modes'
+
+# A conflict is preserved in a private backup.
+conflict_repo="$TEST_ROOT/conflict-repo"
+conflict_home="$TEST_ROOT/conflict-home"
+make_repo "$conflict_repo"
+mkdir -p -- "$conflict_home/.config/niri"
+printf 'old config\n' >"$conflict_home/.config/niri/config.kdl"
+run_install "$conflict_home" "$conflict_repo" --profile desktop --host zq706 >"$TEST_ROOT/conflict.out"
+backup=$(sed -n 's/^Backup: //p' "$TEST_ROOT/conflict.out")
+[[ -n "$backup" && $(stat -c %a "$backup") == 700 ]] || fail 'backup root is not private'
+grep -qx 'old config' "$backup/.config/niri/config.kdl" || fail 'conflict content was not preserved'
+ok 'conflict backup content and mode'
+
+# Legacy directory state is copied out before file-level links are applied.
+legacy_repo="$TEST_ROOT/legacy-repo"
+legacy_home="$TEST_ROOT/legacy-home"
+make_repo "$legacy_repo"
+mkdir -p -- "$legacy_home/.config"
+printf 'state\n' >"$legacy_repo/config/fish/runtime-state"
+ln -s "$legacy_repo/config/fish" "$legacy_home/.config/fish"
+run_install "$legacy_home" "$legacy_repo" --profile core --no-host >/dev/null
+[[ -d "$legacy_home/.config/fish" && ! -L "$legacy_home/.config/fish" ]] || fail 'legacy Fish directory was not detached'
+grep -qx state "$legacy_home/.config/fish/runtime-state" || fail 'legacy runtime state was lost'
+[[ -L "$legacy_home/.config/fish/config.fish" ]] || fail 'managed Fish file was not linked'
+ok 'legacy directory state preservation'
+
+# Manifest errors and HOME traversal fail before any write.
+bad_repo="$TEST_ROOT/bad-repo"
+bad_home="$TEST_ROOT/bad-home"
+make_repo "$bad_repo"
+mkdir -p -- "$bad_home"
+printf 'missing/source\t~/.missing\nREADME.md\t~/../escape\n' >>"$bad_repo/manifests/core.links"
+if run_install "$bad_home" "$bad_repo" --profile core --no-host >/dev/null 2>&1; then
+    fail 'bad manifest unexpectedly succeeded'
+fi
+[[ -z $(find "$bad_home" -mindepth 1 -print -quit) ]] || fail 'bad manifest wrote into HOME'
+[[ ! -e "$TEST_ROOT/escape" ]] || fail 'target escaped HOME'
+ok 'manifest preflight and traversal rejection are zero-write'
+
+# A legacy path pointing outside this checkout cannot be treated as detachable.
+external_repo="$TEST_ROOT/external-repo"
+external_home="$TEST_ROOT/external-home"
+external_target="$TEST_ROOT/external-fish"
+make_repo "$external_repo"
+mkdir -p -- "$external_home/.config" "$external_target"
+printf 'outside\n' >"$external_target/config.fish"
+ln -s "$external_target" "$external_home/.config/fish"
+if run_install "$external_home" "$external_repo" --profile core --no-host >"$TEST_ROOT/external.out" 2>&1; then
+    fail 'external legacy symlink unexpectedly succeeded'
+fi
+[[ -L "$external_home/.config/fish" ]] || fail 'external legacy symlink was mutated'
+grep -qx outside "$external_target/config.fish" || fail 'external legacy target was mutated'
+[[ ! -e "$external_home/.bashrc" ]] || fail 'external legacy preflight wrote an earlier target'
+grep -Fq 'parent-directory symlink must be listed for legacy detachment' "$TEST_ROOT/external.out" || fail 'external legacy rejection reason'
+ok 'external legacy directory symlink is rejected before writes'
+
+# Directory creation/chmod must not follow an unmanaged symlink outside HOME.
+directory_repo="$TEST_ROOT/directory-repo"
+directory_home="$TEST_ROOT/directory-home"
+directory_target="$TEST_ROOT/external-ssh"
+make_repo "$directory_repo"
+mkdir -p -- "$directory_home" "$directory_target"
+chmod 0755 "$directory_target"
+ln -s "$directory_target" "$directory_home/.ssh"
+if run_install "$directory_home" "$directory_repo" --profile core --no-host >"$TEST_ROOT/directory.out" 2>&1; then
+    fail 'external directory target unexpectedly succeeded'
+fi
+[[ -L "$directory_home/.ssh" && $(stat -c %a "$directory_target") == 755 ]] || fail 'external directory target was mutated'
+[[ ! -e "$directory_home/.bashrc" ]] || fail 'external directory preflight wrote an earlier target'
+grep -Fq 'directory target crosses an unmanaged symlink' "$TEST_ROOT/directory.out" || fail 'external directory rejection reason'
+ok 'directory permission target cannot cross unmanaged symlinks'
+
+# Deprecated generated outputs are unlinked only when they still point here.
+generated_repo="$TEST_ROOT/generated-repo"
+generated_home="$TEST_ROOT/generated-home"
+make_repo "$generated_repo"
+mkdir -p -- "$generated_home/.config/gtk-3.0" "$generated_home/.config/gtk-4.0"
+ln -s "$generated_repo/config/gtk-3.0/dank-colors.css" "$generated_home/.config/gtk-3.0/dank-colors.css"
+printf 'machine generated\n' >"$generated_home/.config/gtk-4.0/dank-colors.css"
+run_install "$generated_home" "$generated_repo" --profile desktop --no-host >/dev/null
+[[ ! -e "$generated_home/.config/gtk-3.0/dank-colors.css" ]] || fail 'stale generated link survived'
+grep -qx 'machine generated' "$generated_home/.config/gtk-4.0/dank-colors.css" || fail 'real generated file was changed'
+run_install "$generated_home" "$generated_repo" --profile desktop --no-host --check >/dev/null
+ok 'generated-output links are cleared without touching real files'
+
+# If symlink creation fails after backup, restore the original target.
+rollback_repo="$TEST_ROOT/rollback-repo"
+rollback_home="$TEST_ROOT/rollback-home"
+fake_bin="$TEST_ROOT/fake-bin"
+make_repo "$rollback_repo"
+mkdir -p -- "$rollback_home" "$fake_bin"
+printf 'README.md\t~/.victim\n' >"$rollback_repo/manifests/core.links"
+printf '# empty\n' >"$rollback_repo/manifests/legacy-core.conf"
+printf '# empty\n' >"$rollback_repo/manifests/directories-core.conf"
+printf 'original\n' >"$rollback_home/.victim"
+printf '#!/usr/bin/env bash\nexit 1\n' >"$fake_bin/ln"
+chmod 0755 "$fake_bin/ln"
+if PATH="$fake_bin:$PATH" run_install "$rollback_home" "$rollback_repo" --profile core --no-host >/dev/null 2>&1; then
+    fail 'forced link failure unexpectedly succeeded'
+fi
+grep -qx original "$rollback_home/.victim" || fail 'link failure did not restore original target'
+ok 'single-target link failure rollback'
+
+# Host B replaces host A; repeated B is stable; no-host clears only managed links.
+host_repo="$TEST_ROOT/host-repo"
+host_home="$TEST_ROOT/host-home"
+make_repo "$host_repo"
+mkdir -p "$host_repo/hosts/testb/niri" "$host_repo/hosts/testb/hypr"
+printf '// testb\n' >"$host_repo/hosts/testb/niri/outputs.kdl"
+printf '// testb\n' >"$host_repo/hosts/testb/niri/hardware.kdl"
+printf '%s\n' '-- testb' >"$host_repo/hosts/testb/hypr/machine.lua"
+cp "$host_repo/hosts/zq706/links.conf" "$host_repo/hosts/testb/links.conf"
+sed -i 's#hosts/zq706/#hosts/testb/#g' "$host_repo/hosts/testb/links.conf"
+mkdir -p -- "$host_home/.config/niri/local"
+printf 'user local\n' >"$host_home/.config/niri/local/user.kdl"
+run_install "$host_home" "$host_repo" --profile desktop --host zq706 >/dev/null
+run_install "$host_home" "$host_repo" --profile desktop --host testb >/dev/null
+run_install "$host_home" "$host_repo" --profile desktop --host testb --check >/dev/null
+[[ $(realpath "$host_home/.config/niri/local/outputs.kdl") == "$host_repo/hosts/testb/niri/outputs.kdl" ]] || fail 'host switch target'
+run_install "$host_home" "$host_repo" --profile desktop --no-host >/dev/null
+[[ ! -e "$host_home/.config/niri/local/outputs.kdl" && -f "$host_home/.config/niri/local/user.kdl" ]] || fail 'no-host ownership boundary'
+run_install "$host_home" "$host_repo" --profile desktop --no-host --check >/dev/null
+ok 'host switch idempotence and no-host ownership boundary'
+
+printf '\nInstaller tests: %d passed.\n' "$pass"
