@@ -1,5 +1,5 @@
 // Session-wide environment variables are defined by the login shell in
-// ~/.config/shell/profile.fish and imported by niri-session. Keep this file
+// ~/.config/shell/profile.sh and imported by niri-session. Keep this file
 // for settings that belong to the compositor itself.
 debug {
     // Needed for DMS notification actions and activation.

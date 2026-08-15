@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+fish_history="${XDG_DATA_HOME:-$HOME/.local/share}/fish/fish_history"
+zsh_state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
+zsh_history="$zsh_state_dir/history"
+marker="$zsh_state_dir/.fish-history-migrated"
+
+if [[ ${1:-} == --help ]]; then
+    printf 'Usage: %s [--force]\n' "${0##*/}"
+    exit 0
+fi
+if [[ $# -gt 1 || ( $# -eq 1 && $1 != --force ) ]]; then
+    printf 'Usage: %s [--force]\n' "${0##*/}" >&2
+    exit 2
+fi
+
+command -v fish >/dev/null || { printf 'fish is required to read Fish history\n' >&2; exit 1; }
+command -v perl >/dev/null || { printf 'perl is required to convert Fish history\n' >&2; exit 1; }
+[[ -r "$fish_history" ]] || { printf 'Fish history not found: %s\n' "$fish_history" >&2; exit 1; }
+if [[ -e "$marker" && ${1:-} != --force ]]; then
+    printf 'Fish history was already migrated; use --force to repeat: %s\n' "$marker" >&2
+    exit 1
+fi
+
+umask 077
+mkdir -p -- "$zsh_state_dir"
+tmpdir=$(mktemp -d /tmp/dotfiles-fish-history.XXXXXX)
+cleanup() {
+    if [[ -n ${tmpdir:-} && $tmpdir == /tmp/dotfiles-fish-history.* ]]; then
+        rm -rf -- "$tmpdir"
+    fi
+}
+trap cleanup EXIT
+
+converted="$tmpdir/fish.zsh-history"
+merged="$tmpdir/merged.zsh-history"
+
+# Fish emits oldest-to-newest NUL-delimited records. Zsh represents embedded
+# newlines as backslash-newline continuations in its extended history format.
+fish -c "builtin history search --reverse --null --show-time='%s '" |
+    perl -0 -ne '
+        s/\0\z//;
+        next unless s/^(\d+) //;
+        my $timestamp = $1;
+        s/\n/\\\n/g;
+        print ": $timestamp:0;$_\n";
+    ' >"$converted"
+
+if [[ -s "$zsh_history" ]]; then
+    cp -- "$zsh_history" "$merged"
+    [[ $(tail -c 1 "$merged" | wc -l) -eq 1 ]] || printf '\n' >>"$merged"
+else
+    : >"$merged"
+fi
+cat -- "$converted" >>"$merged"
+
+timestamp=$(date +%Y%m%d-%H%M%S)
+if [[ -e "$zsh_history" ]]; then
+    backup="$zsh_history.pre-fish-migration-$timestamp"
+    cp -p -- "$zsh_history" "$backup"
+else
+    backup='none (Zsh history did not exist)'
+fi
+install -m 0600 -- "$merged" "$zsh_history"
+printf 'migrated_at=%s\nsource=%s\nbackup=%s\n' "$timestamp" "$fish_history" "$backup" >"$marker"
+
+fish_records=$(grep -Ec '^: [0-9]+:0;' "$converted" || true)
+total_records=$(grep -Ec '^: [0-9]+:[0-9]+;' "$zsh_history" || true)
+printf 'Migrated %s Fish records into %s (%s extended records total).\n' \
+    "$fish_records" "$zsh_history" "$total_records"
+printf 'Backup: %s\n' "$backup"

@@ -36,7 +36,8 @@ skip() {
 cd "$repo_dir"
 
 run 'installer and Bash files' bash -n \
-    install .profile .bash_profile .bashrc config/shell/profile.sh
+    install .profile .bash_profile .bashrc config/shell/profile.sh \
+    scripts/migrate-fish-history
 
 if command -v zsh >/dev/null; then
     run 'Zsh files' zsh -n .zprofile .zshrc local/bin/proxy_toggle.zsh

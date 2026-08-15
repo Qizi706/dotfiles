@@ -1,6 +1,6 @@
-# User login/session environment for Bash and Zsh.
-# Fish is the primary login shell; keep this fallback semantically aligned
-# with profile.fish without adding shell-interactive initialization here.
+# User login/session environment for the primary Zsh shell and Bash fallback.
+# Keep this semantically aligned with profile.fish without adding interactive
+# initialization here.
 
 [ "$(id -u)" -eq 0 ] || umask 027
 
@@ -51,6 +51,7 @@ _profile_path_append() {
     esac
 }
 
+_profile_path_prepend "$HOME/Programming/miniconda3/condabin"
 _profile_path_prepend "$CARGO_HOME/bin"
 _profile_path_prepend "$HOME/.local/npm-global/bin"
 _profile_path_prepend "$HOME/.local/sbin"

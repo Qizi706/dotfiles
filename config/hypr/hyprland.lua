@@ -90,7 +90,7 @@ hl.animation({ leaf = "border", enabled = true, speed = 3, bezier = "default" })
 -- ENVIRONMENT VARIABLES ----
 -----------------------------
 
--- Session-wide variables live in ~/.config/shell/profile.fish (or profile.sh)
+-- Session-wide variables live in ~/.config/shell/profile.sh (or profile.fish)
 -- so systemd services and both compositors inherit the same values.
 
 -----------------

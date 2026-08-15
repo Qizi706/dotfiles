@@ -1,4 +1,4 @@
-shell-integration = fish
+shell-integration = detect
 shell-integration-features = ssh-terminfo,ssh-env
 
 # quit-after-last-window-closed = true

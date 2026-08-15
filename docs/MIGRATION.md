@@ -81,8 +81,11 @@ systemctl --user enable --now dms.service
 ```
 
 tmux 在 TPM 尚未安装时也能启动。需要插件时，将 TPM 安装到
-`~/.config/tmux/plugins/tpm`，进入 tmux 后按 `prefix + I`。Zsh 的 Oh My Zsh 和三个
-第三方插件同样是可选项；配置只会启用实际存在的插件。
+`~/.config/tmux/plugins/tpm`，进入 tmux 后按 `prefix + I`。Zsh 是主力交互 shell；
+配置可识别 `~/.oh-my-zsh` 上游 clone 和 AUR 包提供的 `/usr/share/oh-my-zsh`。
+`fzf-tab`、`zsh-autosuggestions`、`fast-syntax-highlighting` 是可选插件，只有实际存在时
+才会按兼容顺序加载；`git`、`fzf`、`uv` 使用 Oh My Zsh 自带插件。未安装 Oh My Zsh
+时仍会回退到 Zsh 原生补全、fzf、zoxide 和 Starship。
 
 Yazi 使用官方 Catppuccin Mocha flavor。desktop profile 链接 `theme.toml` 和带固定 revision
 的 `package.toml`；首次安装或更新后运行 `ya pkg install`，让 Yazi 在 HOME 的真实
@@ -91,7 +94,18 @@ Yazi 使用官方 Catppuccin Mocha flavor。desktop profile 链接 `theme.toml` 
 Zathura 还需要一个 PDF backend；清单默认列出 `zathura-pdf-mupdf`，也可以经审阅后
 改选 `zathura-pdf-poppler`。Conda 本体不由这份 Arch 清单安装：shell 只探测 PATH，
 并兼容回退 `$HOME/Programming/miniconda3`。未安装 Conda 时 shell 仍可正常启动，
-只是受管的 `.condarc` 不会生效。
+只是受管的 `.condarc` 不会生效；Zsh 会在第一次运行 `conda` 时才加载 shell hook。
+
+切换登录 shell 前先开一个交互 Zsh 验收插件与 PATH，然后执行：
+
+```sh
+zsh -l
+chsh -s /usr/bin/zsh
+getent passwd "$USER"
+```
+
+`chsh` 只影响新登录会话。Niri 的 `niri-session` 会在下次注销登录时启动 login Zsh，
+再把 `profile.sh` 中的环境导入 systemd 与 D-Bus；现有图形会话不会就地换 shell。
 
 ## 4. 独立配置与私密数据
 

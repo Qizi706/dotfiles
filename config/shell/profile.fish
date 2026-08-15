@@ -1,6 +1,5 @@
-# User login/session environment for Fish.
-# niri-session starts a login Fish and imports this environment into systemd
-# and D-Bus before launching the compositor.
+# Compatibility login/session environment for Fish. Zsh is the primary shell;
+# keep this aligned with profile.sh for an explicit Fish fallback.
 
 # Match the Bash/Zsh login profile: newly created private files are not
 # readable by other local users. Directories remain traversable by the owner.
@@ -67,7 +66,8 @@ fish_add_path --global --prepend \
     "$HOME/.local/bin" \
     "$HOME/.local/sbin" \
     "$HOME/.local/npm-global/bin" \
-    "$CARGO_HOME/bin"
+    "$CARGO_HOME/bin" \
+    "$HOME/Programming/miniconda3/condabin"
 
 fish_add_path --global --append \
     /opt/cuda/bin \

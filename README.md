@@ -1,7 +1,8 @@
 # dotfiles
 
-这是一套面向 Arch Linux 的可迁移配置，覆盖 Niri、Hyprland、Fish/Zsh/Bash、
-Vim、Ghostty/tmux、Fcitx 5 以及 GTK/Qt。机器相关的显示器和驱动设置与公共配置分离。
+这是一套面向 Arch Linux 的可迁移配置，覆盖 Niri、Hyprland、Zsh/Bash、
+可选的 Fish fallback、Vim、Ghostty/tmux、Fcitx 5 以及 GTK/Qt。机器相关的显示器和
+驱动设置与公共配置分离。
 
 ## 当前机器
 
@@ -28,7 +29,7 @@ scripts/check-deps --profile desktop
 
 可用安装模式：
 
-- `--profile core`：只安装 shell、Git、SSH/GnuPG 配置和终端基础工具。
+- `--profile core`：安装主力 Zsh、Bash fallback、Git、SSH/GnuPG 配置和终端基础工具。
 - `--profile desktop`：在 core 之上安装桌面、输入法、终端和合成器配置。
 - `--host NAME`：叠加 `hosts/NAME/links.conf`；本机也会自动识别 `zq706`。
 - `--no-host`：不安装主机层；会备份并移走指向本仓库 `hosts/*` 的旧受管软链，
