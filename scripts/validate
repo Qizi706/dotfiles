@@ -36,16 +36,19 @@ skip() {
 cd "$repo_dir"
 
 run 'installer and Bash files' bash -n \
-    install profile bash_profile bashrc config/shell/profile.sh \
-    config/hypr/scripts/alttab/alttab.sh \
-    config/hypr/scripts/alttab/disable.sh \
-    config/hypr/scripts/alttab/enable.sh \
-    config/hypr/scripts/alttab/preview.sh
+    install .profile .bash_profile .bashrc config/shell/profile.sh
 
 if command -v zsh >/dev/null; then
-    run 'Zsh files' zsh -n zprofile zshrc local/bin/proxy_toggle.zsh
+    run 'Zsh files' zsh -n .zprofile .zshrc local/bin/proxy_toggle.zsh
 else
     skip 'Zsh files' zsh
+fi
+
+if command -v vim >/dev/null; then
+    run 'Vim config' vim --cmd "set runtimepath^=$repo_dir/config/vim" \
+        -Nu "$repo_dir/.vimrc" -i NONE -n -es '+qall'
+else
+    skip 'Vim config' vim
 fi
 
 if command -v fish >/dev/null; then
@@ -91,17 +94,9 @@ else
     skip 'Hyprland configs' Hyprland
 fi
 
-mkdir -p "$tmpdir/home/.config/foot" "$tmpdir/home/.config/ghostty/shaders"
-ln -s "$repo_dir/config/foot/foot.ini" "$tmpdir/home/.config/foot/foot.ini"
-ln -s "$repo_dir/config/foot/catppuccin-mocha.ini" "$tmpdir/home/.config/foot/catppuccin-mocha.ini"
+mkdir -p "$tmpdir/home/.config/ghostty/shaders"
 ln -s "$repo_dir/config/ghostty/config" "$tmpdir/home/.config/ghostty/config"
 ln -s "$repo_dir/config/ghostty/shaders/cursor_warp_hex.glsl" "$tmpdir/home/.config/ghostty/shaders/cursor_warp_hex.glsl"
-
-if command -v foot >/dev/null; then
-    run 'Foot config' env HOME="$tmpdir/home" foot -C -c "$tmpdir/home/.config/foot/foot.ini"
-else
-    skip 'Foot config' foot
-fi
 
 if command -v ghostty >/dev/null; then
     run 'Ghostty config' env HOME="$tmpdir/home" ghostty +validate-config --config-file="$tmpdir/home/.config/ghostty/config"
@@ -136,10 +131,10 @@ else
     skip 'GnuPG config' gpg
 fi
 
-run 'Git config' git config --file gitconfig --list
+run 'Git config' git config --file .gitconfig --list
 
 if command -v conda >/dev/null; then
-    run 'Conda config' conda config --file "$repo_dir/condarc" --show
+    run 'Conda config' conda config --file "$repo_dir/.condarc" --show
 else
     skip 'Conda config' conda
 fi
@@ -191,12 +186,19 @@ run 'Zathura config shape' bash -c '
     [[ $(grep -Ec "^set [a-z0-9-]+ " config/zathura/zathurarc) -eq 6 ]]
 '
 
+run 'Yazi Catppuccin flavor' bash -c '
+    set -euo pipefail
+    grep -Fqx "dark  = \"catppuccin-mocha\"" config/yazi/theme.toml
+    grep -Fqx "light = \"catppuccin-mocha\"" config/yazi/theme.toml
+    grep -Fqx "use = \"yazi-rs/flavors:catppuccin-mocha\"" config/yazi/package.toml
+    ! grep -R -E "syntect_theme|Catppuccin-mocha\\.tmTheme" config/yazi
+'
+
 run 'DMS generated-file boundary' bash -c '
     set -euo pipefail
     generated=(
         config/DankMaterialShell/firefox.css
         config/alacritty/dank-theme.toml
-        config/foot/dank-colors.ini
         config/ghostty/themes/dankcolors
         config/gtk-3.0/dank-colors.css
         config/gtk-4.0/dank-colors.css
@@ -210,7 +212,7 @@ run 'DMS generated-file boundary' bash -c '
         git check-ignore -q "$path"
     done
     ! awk -F "\\t" '\''NF >= 2 { print $2 }'\'' manifests/desktop.links |
-        grep -Eq "~/.config/(alacritty|foot|ghostty|kitty|qt5ct/colors|qt6ct/colors)$"
+        grep -Eq "~/.config/(alacritty|ghostty|kitty|qt5ct/colors|qt6ct/colors)$"
 '
 
 if command -v systemd-analyze >/dev/null; then

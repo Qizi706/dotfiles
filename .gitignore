@@ -35,7 +35,6 @@ config/fcitx/
 config/fcitx5/conf/cached_layouts
 config/fish/conf.d/*.bak
 config/fish/fish_variables*
-config/foot/dank-colors.ini
 config/fontconfig/*.bak
 config/go/
 config/gtk-3.0/assets

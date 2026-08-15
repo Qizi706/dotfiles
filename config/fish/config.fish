@@ -10,15 +10,4 @@ end
 if status is-interactive
     type -q zoxide; and zoxide init fish | source
     type -q starship; and starship init fish | source
-
-    set -l conda_executable (command -s conda)
-    if test -z "$conda_executable"; and test -x "$HOME/Programming/miniconda3/bin/conda"
-        set conda_executable "$HOME/Programming/miniconda3/bin/conda"
-    end
-
-    if test -n "$conda_executable"
-        "$conda_executable" shell.fish hook $argv | source
-    else if test -f "$HOME/Programming/miniconda3/etc/fish/conf.d/conda.fish"
-        source "$HOME/Programming/miniconda3/etc/fish/conf.d/conda.fish"
-    end
 end

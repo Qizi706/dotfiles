@@ -119,9 +119,6 @@ binds {
     Mod+Shift+P { power-off-monitors; }
     Mod+Shift+O { power-on-monitors; }
 
-    // Pot screenshot translation from the Hyprland config.
-    Mod+C { spawn-sh "mkdir -p \"$XDG_CACHE_HOME/com.pot-app.desktop\" && grim -g \"$(slurp)\" \"$XDG_CACHE_HOME/com.pot-app.desktop/pot_screenshot_cut.png\" && curl --fail --silent --show-error \"127.0.0.1:60828/ocr_translate?screenshot=false\""; }
-
     Mod+O repeat=false { toggle-overview; }
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }

@@ -1,0 +1,4 @@
+# The single Qizi706 identity is stored outside this public repository. The
+# installer creates ~/.config/git, while local.conf supplies the private email.
+[include]
+	path = ~/.config/git/local.conf

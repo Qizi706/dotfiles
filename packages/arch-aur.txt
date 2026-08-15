@@ -11,18 +11,12 @@ flclash-bin
 # config/fcitx5/conf/classicui.conf selects Theme=OriDark.
 fcitx5-skin-ori-git
 
-# config/hypr/hyprland.lua invokes grimblast directly. The current machine has
-# an unowned /usr/local/bin/grimblast; installing a package or changing those
-# bindings is required to make that dependency reproducible.
-grimblast-git
-
 # @optional
 
 # Optional integrations guarded by the shell/compositor configs.
 linuxqq
 looking-glass-git
 oh-my-zsh-git
-pot-translation
 tmux-plugin-manager
 typora
 wechat

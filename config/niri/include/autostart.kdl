@@ -4,3 +4,4 @@
 // PolicyKit agent. Fcitx 5 uses the system XDG autostart entry.
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 spawn-sh-at-startup "echo 'Xft.dpi:103' | xrdb -merge"
+spawn-sh-at-startup "flclash"

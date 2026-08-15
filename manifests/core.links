@@ -1,11 +1,13 @@
 # repository source<TAB>home target
-profile	~/.profile
-bash_profile	~/.bash_profile
-bashrc	~/.bashrc
-zprofile	~/.zprofile
-zshrc	~/.zshrc
-condarc	~/.condarc
-gitconfig	~/.gitconfig
+.profile	~/.profile
+.bash_profile	~/.bash_profile
+.bashrc	~/.bashrc
+.zprofile	~/.zprofile
+.zshrc	~/.zshrc
+.condarc	~/.condarc
+.gitconfig	~/.gitconfig
+.vimrc	~/.vimrc
+config/vim/colors/catppuccin_mocha.vim	~/.vim/colors/catppuccin_mocha.vim
 ssh/config	~/.ssh/config
 gnupg/common.conf	~/.gnupg/common.conf
 config/shell	~/.config/shell

@@ -64,19 +64,14 @@ scripts/check-deps --profile desktop
 ```
 
 `packages/arch-official.txt` 和 `packages/arch-aur.txt` 分为 required/optional。不要把清单
-直接无脑交给包管理器；先处理检查器报告的 provider 与冲突。本机当前有三项特别事项：
+直接无脑交给包管理器；先处理检查器报告的 provider 与冲突。`uv` 已使用官方 Arch 包，
+DMS 使用稳定版 `dms-shell + dms-shell-niri + dms-shell-hyprland`。Niri 与 Hyprland 的
+截图入口全部只调用 `dms screenshot`，不再声明额外的截图 CLI 依赖。`wl-clipboard` 仍用于
+两个合成器的剪贴板历史监听。
 
-1. `uv` 位于 Cargo 目录但没有 pacman 归属；新机应选择官方 `uv` 包或明确采用官方安装器。
-2. `/usr/local/bin/grimblast` 没有包归属；Hyprland 截图要可复现，应安装 `grimblast-git`
-   或把对应绑定改为 DMS/grim。
-3. 本机仍是 `dms-shell-git`。迁移到稳定版时，应把 `dms-shell`、
-   `dms-shell-niri`、`dms-shell-hyprland` 作为同一笔事务安装，并审阅包管理器给出的
-   `dms-shell-git`/debug 包替换提示；不要混装两套 provider。
-
-QQ、WeChat、Typora 等应用放在 optional 清单。新机应让软件包创建自己的 desktop
-launcher；不要复制本机 `~/.local/share/applications/com.qq.weixin.desktop`，其中含当前
-用户名的绝对路径。Linux QQ 使用包自带的 `/usr/share/applications/qq.desktop`，无需
-额外创建 Niri 专用 launcher。
+QQ、WeChat、Typora 等应用放在 optional 清单。新机应让软件包或 portable 包装器创建
+自己的 desktop launcher，不把机器生成的用户 launcher 纳入 dotfiles。Linux QQ 使用
+包自带的 `/usr/share/applications/qq.desktop`，无需额外创建 Niri 专用 launcher。
 
 迁移 DMS 后执行：
 
@@ -88,6 +83,10 @@ systemctl --user enable --now dms.service
 tmux 在 TPM 尚未安装时也能启动。需要插件时，将 TPM 安装到
 `~/.config/tmux/plugins/tpm`，进入 tmux 后按 `prefix + I`。Zsh 的 Oh My Zsh 和三个
 第三方插件同样是可选项；配置只会启用实际存在的插件。
+
+Yazi 使用官方 Catppuccin Mocha flavor。desktop profile 链接 `theme.toml` 和带固定 revision
+的 `package.toml`；首次安装或更新后运行 `ya pkg install`，让 Yazi 在 HOME 的真实
+`~/.config/yazi/flavors` 目录中部署主题资源。
 
 Zathura 还需要一个 PDF backend；清单默认列出 `zathura-pdf-mupdf`，也可以经审阅后
 改选 `zathura-pdf-poppler`。Conda 本体不由这份 Arch 清单安装：shell 只探测 PATH，
@@ -102,10 +101,13 @@ Neovim 不嵌套进 dotfiles，它继续使用独立仓库：
 git clone --branch macos git@github.com:Qizi706/nvim.git ~/.config/nvim
 ```
 
-`macos` 是本机当前分支名；迁移前应确认目标机器真正需要的分支。本机该仓库还有一个
-修改过的 `nvim.log`，它是运行日志，不应作为配置迁移。
+`macos` 是本机当前分支名；迁移前应确认目标机器真正需要的分支。`nvim.log` 是运行
+日志，已从该仓库取消跟踪并加入忽略，不应作为配置迁移。
 
-DMS/Matugen 主题输出（Kitty/Foot/Ghostty/Alacritty、GTK/Qt palette、Firefox CSS、
+传统 Vim 仍在使用，其 `.vimrc` 与 Catppuccin Mocha 配色由 core profile 纳管；
+`.vim/.netrwhist` 等运行态继续留在 HOME，不进入仓库。
+
+DMS/Matugen 主题输出（Kitty/Ghostty/Alacritty、GTK/Qt palette、Firefox CSS、
 dgop 和 Neovim colors）不作为配置快照迁移。安装后由 DMS 在 HOME 的真实目录重新生成；
 受管的静态入口和 Catppuccin/Noctalia fallback 保证生成前仍有可用基础主题。不要把这些
 输出改成指向仓库的软链，否则切换壁纸或主题会直接修改 Git 工作树。
@@ -138,8 +140,9 @@ $EDITOR ~/.config/git/local.conf
 git config --show-origin --get user.email
 ```
 
-本机已有的身份已迁到该 local 文件。若个人/公司身份并存，请使用 Git 的条件 include
-按仓库目录拆分身份，不要把真实邮箱写回受管 `gitconfig`。
+本配置只使用 `Qizi706` 这一套 Git 身份；本机已有的邮箱保留在该 local 文件中。不要增加
+条件 include，也不要把真实邮箱写回受管 `.gitconfig`。命令输出的 origin 应为
+`~/.config/git/local.conf`。
 
 ## 5. 登录后验收
 
@@ -155,7 +158,6 @@ niri validate
 
 然后人工检查以下运行时行为：
 
-- Niri 中 `Mod+J` 向下切换工作区，`Mod+K` 向上切换工作区。
 - 截图写入 `~/Pictures/Screenshots`。
 - Fcitx 5、DMS、portal 屏幕共享、音频和显示器缩放正常。
 - 重载 tmux（`prefix + r`）后，终端到 tmux 再到 Neovim 的扩展按键链路正常。

@@ -102,7 +102,6 @@ hl.on("hyprland.start", function()
 		"dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start hyprland-session.target",
 		[[echo 'Xft.dpi:103' | xrdb -merge]],
 		"wl-paste --watch cliphist store",
-		"foot --server -c $XDG_CONFIG_HOME/foot/foot.ini",
 	}
 
 	for _, command in ipairs(commands) do
@@ -174,11 +173,6 @@ window_rule("QQ", { workspace = "4" })
 window_rule("wechat", { workspace = "4" })
 window_rule("discord", { workspace = "4" })
 window_rule([=[com\.follow\.clash]=], { workspace = "9" })
-
-window_rule("pot", {
-	float = true,
-	move = { "cursor_x", "cursor_y" },
-})
 
 --------------------
 -- KEYBINDINGS -----
@@ -361,12 +355,12 @@ bind(mod .. " + SHIFT + minus", resize_by_percent(0, -0.1), { repeating = true }
 bind(mod .. " + SHIFT + equal", resize_by_percent(0, 0.1), { repeating = true })
 
 -- Screenshots
-bind("ALT + S", hl.dsp.exec_cmd("grimblast copy area"))
-bind("CTRL + XF86Launch1", hl.dsp.exec_cmd("grimblast copy screen"))
-bind("ALT + XF86Launch1", hl.dsp.exec_cmd("grimblast copy active"))
+bind("ALT + S", hl.dsp.exec_cmd("dms screenshot --no-file"))
+bind("CTRL + XF86Launch1", hl.dsp.exec_cmd("dms screenshot full --no-file"))
+bind("ALT + XF86Launch1", hl.dsp.exec_cmd("dms screenshot window --no-file"))
 bind("ALT + SHIFT + S", hl.dsp.exec_cmd([[dms screenshot --dir "$HOME/Pictures/Screenshots"]]))
-bind("CTRL + Print", hl.dsp.exec_cmd("grimblast copy screen"))
-bind("ALT + Print", hl.dsp.exec_cmd("grimblast copy active"))
+bind("CTRL + Print", hl.dsp.exec_cmd("dms screenshot full --no-file"))
+bind("ALT + Print", hl.dsp.exec_cmd("dms screenshot window --no-file"))
 
 -- DPMS
 bind(mod .. " + SHIFT + P", function()
@@ -376,95 +370,11 @@ bind(mod .. " + SHIFT + P", function()
 end)
 bind(mod .. " + SHIFT + O", hl.dsp.dpms({ action = "on" }))
 
------------------
--- ALT + TAB ----
------------------
+---------------------
+-- DMS OVERVIEW -----
+---------------------
 
-alt_tab_down_bind = bind("ALT + TAB", hl.dsp.exec_cmd("$XDG_CONFIG_HOME/hypr/scripts/alttab/enable.sh down"))
-alt_tab_up_bind = bind("ALT + SHIFT + TAB", hl.dsp.exec_cmd("$XDG_CONFIG_HOME/hypr/scripts/alttab/enable.sh up"))
-
-hl.define_submap("alttab", function()
-	bind("ALT + Tab", hl.dsp.send_shortcut({ mods = "", key = "tab", window = "class:alttab" }))
-	bind("ALT + SHIFT + Tab", hl.dsp.send_shortcut({ mods = "SHIFT", key = "tab", window = "class:alttab" }))
-
-	local finish = "$XDG_CONFIG_HOME/hypr/scripts/alttab/disable.sh"
-	bind(
-		"ALT + ALT_L",
-		hl.dsp.exec_cmd(
-			finish
-				.. [[; hyprctl -q dispatch 'hl.dsp.send_shortcut({ mods = "", key = "return", window = "class:alttab" })']]
-		),
-		{
-			release = true,
-			transparent = true,
-		}
-	)
-	bind(
-		"ALT + SHIFT + ALT_L",
-		hl.dsp.exec_cmd(
-			finish
-				.. [[; hyprctl -q dispatch 'hl.dsp.send_shortcut({ mods = "", key = "return", window = "class:alttab" })']]
-		),
-		{
-			release = true,
-			transparent = true,
-		}
-	)
-	bind(
-		"ALT + Return",
-		hl.dsp.exec_cmd(
-			finish
-				.. [[; hyprctl -q dispatch 'hl.dsp.send_shortcut({ mods = "", key = "return", window = "class:alttab" })']]
-		)
-	)
-	bind(
-		"ALT + SHIFT + Return",
-		hl.dsp.exec_cmd(
-			finish
-				.. [[; hyprctl -q dispatch 'hl.dsp.send_shortcut({ mods = "", key = "return", window = "class:alttab" })']]
-		)
-	)
-	bind(
-		"ALT + escape",
-		hl.dsp.exec_cmd(
-			finish
-				.. [[; hyprctl -q dispatch 'hl.dsp.send_shortcut({ mods = "", key = "escape", window = "class:alttab" })']]
-		)
-	)
-	bind(
-		"ALT + SHIFT + escape",
-		hl.dsp.exec_cmd(
-			finish
-				.. [[; hyprctl -q dispatch 'hl.dsp.send_shortcut({ mods = "", key = "escape", window = "class:alttab" })']]
-		)
-	)
-end)
-
-hl.workspace_rule({
-	workspace = "special:alttab",
-	gaps_out = 0,
-	gaps_in = 0,
-	border_size = 0,
-})
-window_rule("alttab", {
-	no_anim = true,
-	stay_focused = true,
-	workspace = "special:alttab",
-	border_size = 0,
-})
-
--------------------
--- TRANSLATION ----
--------------------
-
-bind(
-	mod .. " + C",
-	hl.dsp.exec_cmd([[
-    mkdir -p "$XDG_CACHE_HOME/com.pot-app.desktop" &&
-    grim -g "$(slurp)" "$XDG_CACHE_HOME/com.pot-app.desktop/pot_screenshot_cut.png" &&
-    curl --fail --silent --show-error "127.0.0.1:60828/ocr_translate?screenshot=false"
-]])
-)
+bind("ALT + TAB", hl.dsp.exec_cmd("dms ipc call hypr toggleOverview"))
 
 -- DMS-generated modules are local runtime state and may be absent on a new host.
 local function require_optional(module)

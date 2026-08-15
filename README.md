@@ -1,7 +1,7 @@
 # dotfiles
 
 这是一套面向 Arch Linux 的可迁移配置，覆盖 Niri、Hyprland、Fish/Zsh/Bash、
-Ghostty/tmux、Fcitx 5 以及 GTK/Qt。机器相关的显示器和驱动设置与公共配置分离。
+Vim、Ghostty/tmux、Fcitx 5 以及 GTK/Qt。机器相关的显示器和驱动设置与公共配置分离。
 
 ## 当前机器
 
@@ -21,7 +21,7 @@ scripts/validate
 scripts/check-deps --profile desktop
 ```
 
-`./install` 不依赖 Dotbot，不联网，也不删除冲突文件。它会先验证完整清单，再开始
+`./install` 不联网，也不删除冲突文件。它会先验证完整清单，再开始
 写入；冲突会先移动到权限为 `0700` 的
 `$XDG_STATE_HOME/dotfiles/backups/<时间>-<进程号>/`。旧版配置留下的整目录软链会先
 拆成真实目录，以免 Fish 变量、tmux 插件、Pulse cookie 等运行时状态继续写进仓库。

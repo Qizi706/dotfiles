@@ -3,8 +3,6 @@ config/alacritty/alacritty.toml	~/.config/alacritty/alacritty.toml
 config/alacritty/catppuccin-mocha.toml	~/.config/alacritty/catppuccin-mocha.toml
 config/btop/btop.conf	~/.config/btop/btop.conf
 config/fastfetch/config.jsonc	~/.config/fastfetch/config.jsonc
-config/foot/catppuccin-mocha.ini	~/.config/foot/catppuccin-mocha.ini
-config/foot/foot.ini	~/.config/foot/foot.ini
 config/fontconfig/fonts.conf	~/.config/fontconfig/fonts.conf
 config/ghostty/config	~/.config/ghostty/config
 config/ghostty/shaders/cursor_warp_hex.glsl	~/.config/ghostty/shaders/cursor_warp_hex.glsl
@@ -33,14 +31,14 @@ config/qt6ct/qt6ct.conf	~/.config/qt6ct/qt6ct.conf
 config/qt6ct/colors/noctalia.conf	~/.config/qt6ct/colors/noctalia.conf
 config/niri/include	~/.config/niri/include
 config/niri/config.kdl	~/.config/niri/config.kdl
-config/hypr/scripts	~/.config/hypr/scripts
 config/hypr/hyprland.lua	~/.config/hypr/hyprland.lua
 config/mimeapps.list	~/.config/mimeapps.list
 config/systemd/user/hyprland-session.target	~/.config/systemd/user/hyprland-session.target
-config/user-dirs.dirs	~/.config/user-dirs.dirs
 config/user-dirs.locale	~/.config/user-dirs.locale
 config/vlc/vlcrc	~/.config/vlc/vlcrc
 config/electron-flags.conf	~/.config/electron-flags.conf
 config/qq-flags.conf	~/.config/qq-flags.conf
 config/typora-flags.conf	~/.config/typora-flags.conf
+config/yazi/package.toml	~/.config/yazi/package.toml
+config/yazi/theme.toml	~/.config/yazi/theme.toml
 config/zathura/zathurarc	~/.config/zathura/zathurarc

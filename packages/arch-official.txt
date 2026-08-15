@@ -28,27 +28,23 @@ openssh
 starship
 tmux
 uv
+vim
 wget
 zoxide
 zsh
 
 # Primary compositors, shell, terminals, and their direct helpers.
-chafa
 cliphist
-curl
 dgop
 dms-shell
 dms-shell-hyprland
 dms-shell-niri
-foot
 ghostty
-grim
 hyprland
 jq
 nautilus
 networkmanager
 niri
-slurp
 wl-clipboard
 wtype
 xorg-xrdb

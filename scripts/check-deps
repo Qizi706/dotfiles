@@ -153,7 +153,7 @@ read_manifest "$OFFICIAL_MANIFEST" official_required official_optional
 read_manifest "$AUR_MANIFEST" aur_required aur_optional
 
 if [[ $profile == core ]]; then
-  core_packages=(bash bat fish fzf gawk git gnupg less neovim npm openssh starship tmux uv wget zoxide zsh)
+  core_packages=(bash bat fish fzf gawk git gnupg less neovim npm openssh starship tmux uv vim wget zoxide zsh)
   declare -A core_package_set=()
   for package in "${core_packages[@]}"; do core_package_set[$package]=1; done
   filtered=()
@@ -405,7 +405,7 @@ audit_command_ownership() {
   local command_name path owner
   local printed_header=false
 
-  for command_name in uv grimblast; do
+  for command_name in uv; do
     path=$(command -v "$command_name" 2>/dev/null || true)
     [[ -z $path ]] && continue
 
@@ -443,7 +443,7 @@ fi
 if [[ $profile == desktop ]]; then
   audit_command_ownership
 else
-  # uv is part of the core shell profile; grimblast is desktop-only.
+  # uv is part of the core shell profile.
   path=$(command -v uv 2>/dev/null || true)
   if [[ -n $path && -z $(pacman -Qoq "$path" 2>/dev/null || true) ]]; then
     printf '\nCommand ownership\n[WARN] uv exists at %s but is not owned by a package.\n' "$path"
