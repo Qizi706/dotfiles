@@ -1,6 +1,6 @@
 // --- CONFIGURATION ---
 vec4 TRAIL_COLOR = iCurrentCursorColor; // can change to eg: vec4(0.2, 0.6, 1.0, 0.5);
-const float DURATION = 0.4; // total animation time
+const float DURATION = 0.5; // total animation time
 const float TRAIL_SIZE = 1.0; // 0.0 = all corners move together. 1.0 = max smear (leading corners jump instantly)
 const float SHAPE_FACTOR = 0.3; // 0.0 = tri
 const float THRESHOLD_MIN_DISTANCE = 0.1; // min distance to show trail (units of cursor height)
