@@ -114,7 +114,7 @@ window-rule {
     match app-id=r#"^QQ$"#
     match app-id=r#"^wechat$"#
     match app-id=r#"^discord$"#
-    open-on-workspace "2"
+    // open-on-workspace "3"
 }
 
 window-rule {
