@@ -38,7 +38,9 @@ scripts/check-deps --profile desktop
 
 ## 目录边界
 
-- `config/niri/include`、`config/hypr`：跨机器公共行为。
+- `.config`、`.local`、`.vim`、`.ssh`、`.gnupg`：与 HOME 中的受管目标保持同名路径；
+  清单中的公共源路径可直接映射到 `~/`。
+- `.config/niri/include`、`.config/hypr`：跨机器公共行为。
 - `hosts/<主机名>`：输出接口、分辨率、缩放、GPU workaround。
 - `manifests`：逐文件/目录安装清单，避免链接整个动态状态目录。
 - `packages`：Arch 官方仓库与 AUR 依赖清单；检查器只读，不会安装或升级。

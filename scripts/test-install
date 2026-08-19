@@ -54,8 +54,8 @@ legacy_repo="$TEST_ROOT/legacy-repo"
 legacy_home="$TEST_ROOT/legacy-home"
 make_repo "$legacy_repo"
 mkdir -p -- "$legacy_home/.config"
-printf 'state\n' >"$legacy_repo/config/fish/runtime-state"
-ln -s "$legacy_repo/config/fish" "$legacy_home/.config/fish"
+printf 'state\n' >"$legacy_repo/.config/fish/runtime-state"
+ln -s "$legacy_repo/.config/fish" "$legacy_home/.config/fish"
 run_install "$legacy_home" "$legacy_repo" --profile core --no-host >/dev/null
 [[ -d "$legacy_home/.config/fish" && ! -L "$legacy_home/.config/fish" ]] || fail 'legacy Fish directory was not detached'
 grep -qx state "$legacy_home/.config/fish/runtime-state" || fail 'legacy runtime state was lost'
@@ -113,7 +113,7 @@ generated_repo="$TEST_ROOT/generated-repo"
 generated_home="$TEST_ROOT/generated-home"
 make_repo "$generated_repo"
 mkdir -p -- "$generated_home/.config/gtk-3.0" "$generated_home/.config/gtk-4.0"
-ln -s "$generated_repo/config/gtk-3.0/dank-colors.css" "$generated_home/.config/gtk-3.0/dank-colors.css"
+ln -s "$generated_repo/.config/gtk-3.0/dank-colors.css" "$generated_home/.config/gtk-3.0/dank-colors.css"
 printf 'machine generated\n' >"$generated_home/.config/gtk-4.0/dank-colors.css"
 run_install "$generated_home" "$generated_repo" --profile desktop --no-host >/dev/null
 [[ ! -e "$generated_home/.config/gtk-3.0/dank-colors.css" ]] || fail 'stale generated link survived'

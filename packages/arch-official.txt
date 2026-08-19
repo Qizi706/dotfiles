@@ -50,7 +50,7 @@ xorg-xrdb
 xorg-xwayland
 xwayland-satellite
 
-# Input method and the engine selected by config/fcitx5/profile.
+# Input method and the engine selected by .config/fcitx5/profile.
 fcitx5
 fcitx5-chinese-addons
 fcitx5-gtk

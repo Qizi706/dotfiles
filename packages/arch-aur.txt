@@ -5,10 +5,10 @@
 
 # @required
 
-# config/mimeapps.list routes proxy-related URL schemes to this application.
+# .config/mimeapps.list routes proxy-related URL schemes to this application.
 flclash-bin
 
-# config/fcitx5/conf/classicui.conf selects Theme=OriDark.
+# .config/fcitx5/conf/classicui.conf selects Theme=OriDark.
 fcitx5-skin-ori-git
 
 # @optional

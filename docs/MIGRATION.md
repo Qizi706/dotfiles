@@ -139,8 +139,8 @@ dms backup restore /path/to/private/dms-backup.tar.gz
 
 以下内容必须通过密码管理器、加密备份或硬件密钥单独恢复：
 
-- `~/.ssh` 私钥与 `known_hosts`；仓库只含通用 `ssh/config`。
-- GnuPG keybox、trustdb 和私钥；仓库只含 `common.conf`。
+- `~/.ssh` 私钥与 `known_hosts`；仓库只含通用 `.ssh/config`。
+- GnuPG keybox、trustdb 和私钥；仓库只含 `.gnupg/common.conf`。
 - 浏览器 profile、Pulse cookie、Rime 用户词库、应用 token 和 shell history。
 - DMS/dgop 生成的 `~/.config/dgop/colors.json`；它应由新会话重新生成。
 
