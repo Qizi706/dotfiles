@@ -66,8 +66,7 @@ fish_add_path --global --prepend \
     "$HOME/.local/bin" \
     "$HOME/.local/sbin" \
     "$HOME/.local/npm-global/bin" \
-    "$CARGO_HOME/bin" \
-    "$HOME/Programming/miniconda3/condabin"
+    "$CARGO_HOME/bin"
 
 fish_add_path --global --append \
     /opt/cuda/bin \

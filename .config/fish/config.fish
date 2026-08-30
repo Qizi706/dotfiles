@@ -4,9 +4,9 @@ if status is-login
     source "$HOME/.config/shell/profile.fish"
 end
 
-# Prompt helpers and Conda belong only to interactive terminals; keeping them
-# here prevents the graphical session and GUI applications from inheriting a
-# Conda-modified PATH.
+# Prompt helpers belong only to interactive terminals; keeping them here
+# prevents the graphical session and GUI applications from inheriting
+# interactive-only state.
 if status is-interactive
     type -q zoxide; and zoxide init fish | source
     type -q starship; and starship init fish | source

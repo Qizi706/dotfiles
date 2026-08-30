@@ -51,7 +51,6 @@ _profile_path_append() {
     esac
 }
 
-_profile_path_prepend "$HOME/Programming/miniconda3/condabin"
 _profile_path_prepend "$CARGO_HOME/bin"
 _profile_path_prepend "$HOME/.local/npm-global/bin"
 _profile_path_prepend "$HOME/.local/sbin"

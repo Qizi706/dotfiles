@@ -147,12 +147,6 @@ run 'Shared manifests mirror HOME paths' awk -F '\t' '
     }
 ' manifests/core.links manifests/desktop.links
 
-if command -v conda >/dev/null; then
-    run 'Conda config' conda config --file "$repo_dir/.condarc" --show
-else
-    skip 'Conda config' conda
-fi
-
 run 'Electron application flags' bash -c '
     set -euo pipefail
     for file in .config/electron-flags.conf .config/qq-flags.conf .config/typora-flags.conf; do

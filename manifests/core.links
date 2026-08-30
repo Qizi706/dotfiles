@@ -4,7 +4,6 @@
 .bashrc	~/.bashrc
 .zprofile	~/.zprofile
 .zshrc	~/.zshrc
-.condarc	~/.condarc
 .gitconfig	~/.gitconfig
 .vimrc	~/.vimrc
 .vim/colors/catppuccin_mocha.vim	~/.vim/colors/catppuccin_mocha.vim

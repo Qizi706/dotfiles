@@ -92,9 +92,7 @@ Yazi 使用官方 Catppuccin Mocha flavor。desktop profile 链接 `theme.toml` 
 `~/.config/yazi/flavors` 目录中部署主题资源。
 
 Zathura 还需要一个 PDF backend；清单默认列出 `zathura-pdf-mupdf`，也可以经审阅后
-改选 `zathura-pdf-poppler`。Conda 本体不由这份 Arch 清单安装：shell 只探测 PATH，
-并兼容回退 `$HOME/Programming/miniconda3`。未安装 Conda 时 shell 仍可正常启动，
-只是受管的 `.condarc` 不会生效；Zsh 会在第一次运行 `conda` 时才加载 shell hook。
+改选 `zathura-pdf-poppler`。
 
 切换登录 shell 前先开一个交互 Zsh 验收插件与 PATH，然后执行：
 

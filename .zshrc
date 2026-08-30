@@ -77,27 +77,6 @@ if (( $+commands[zoxide] )); then
   alias cd='z'
 fi
 
-# Make Conda available without paying for its shell hook on every terminal.
-typeset -g _dotfiles_conda_executable=''
-if (( $+commands[conda] )); then
-  _dotfiles_conda_executable=$commands[conda]
-elif [[ -x "$HOME/Programming/miniconda3/bin/conda" ]]; then
-  _dotfiles_conda_executable="$HOME/Programming/miniconda3/bin/conda"
-fi
-
-if [[ -n $_dotfiles_conda_executable ]]; then
-  conda() {
-    local conda_hook
-    if ! conda_hook="$("$_dotfiles_conda_executable" shell.zsh hook 2>/dev/null)"; then
-      "$_dotfiles_conda_executable" "$@"
-      return
-    fi
-    eval "$conda_hook"
-    unset _dotfiles_conda_executable
-    conda "$@"
-  }
-fi
-
 git-count() {
   if (( $# < 1 )); then
     print -u2 'usage: git-count <commit_hash> [author-regex]'
