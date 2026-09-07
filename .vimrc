@@ -15,14 +15,14 @@ set noswapfile
 
 set expandtab
 set smarttab
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=8
+set tabstop=8
 set autoindent
 set smartindent
 set wrap
 
 set number
-set relativenumber
+" set relativenumber
 set clipboard=unnamedplus
 set ignorecase
 set smartcase
@@ -33,4 +33,4 @@ endif
 
 nnoremap K <Nop>
 
-colorscheme catppuccin_mocha
+" colorscheme catppuccin_mocha
