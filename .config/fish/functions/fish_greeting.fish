@@ -1,3 +1,3 @@
 function fish_greeting
-    type -q fastfetch; and fastfetch
+    # type -q fastfetch; and fastfetch
 end

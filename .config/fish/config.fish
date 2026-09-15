@@ -8,6 +8,10 @@ end
 # prevents the graphical session and GUI applications from inheriting
 # interactive-only state.
 if status is-interactive
+    if type -q fzf
+        set -q FZF_ALT_C_OPTS; or set -gx FZF_ALT_C_OPTS '--preview="ls -lah --color=always -- {}"'
+        fzf --fish | source
+    end
     type -q zoxide; and zoxide init fish | source
     type -q starship; and starship init fish | source
 end

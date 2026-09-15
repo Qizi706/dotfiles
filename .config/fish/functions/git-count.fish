@@ -27,4 +27,12 @@ function git-count --description "统计指定 commit 之后指定作者的代�
                 printf "---------------------------\n作者: %s\n起始提交: %s\n---------------------------\n新增行数: %s\n删除行数: %s\n净增行数: %s\n", authors, start, add, subs, loc
             }
         '
+    # Fish returns the last pipeline command's status by default.
+    set -l pipeline_status $pipestatus
+    for code in $pipeline_status
+        if test "$code" -ne 0
+            return $code
+        end
+    end
+    return 0
 end
