@@ -80,11 +80,11 @@ else
     skip 'Niri configs' niri
 fi
 
-run 'Niri Mod+J/K workspace semantics' bash -c '
+run 'Niri Mod+J/K window-or-workspace navigation' bash -c '
     [[ $(grep -R -h -E "^[[:space:]]*Mod\\+J[[:space:]]" .config/niri/include/*.kdl | wc -l) -eq 1 ]] &&
     [[ $(grep -R -h -E "^[[:space:]]*Mod\\+K[[:space:]]" .config/niri/include/*.kdl | wc -l) -eq 1 ]] &&
-    grep -Fqx "    Mod+J     { focus-workspace-down; }" .config/niri/include/binds.kdl &&
-    grep -Fqx "    Mod+K     { focus-workspace-up; }" .config/niri/include/binds.kdl &&
+    grep -Fqx "    Mod+J     { focus-window-or-workspace-down; }" .config/niri/include/binds.kdl &&
+    grep -Fqx "    Mod+K     { focus-window-or-workspace-up; }" .config/niri/include/binds.kdl &&
     ! grep -R -E "^[[:space:]]*include.*dms/binds" .config/niri/config.kdl .config/niri/include/*.kdl
 '
 
@@ -169,8 +169,10 @@ run 'Electron application flags' bash -c '
 run 'MIME application defaults' bash -c '
     grep -Fqx "[Default Applications]" .config/mimeapps.list &&
     grep -Fqx "application/pdf=firefox.desktop;" .config/mimeapps.list &&
-    grep -Fqx "x-scheme-handler/clash=flclash.desktop;" .config/mimeapps.list &&
-    grep -Fqx "x-scheme-handler/clash-verge=flclash.desktop;" .config/mimeapps.list &&
+    grep -Fqx "x-scheme-handler/clash=clash-verge-handler.desktop;" .config/mimeapps.list &&
+    grep -Fqx "x-scheme-handler/clash-verge=clash-verge-handler.desktop;" .config/mimeapps.list &&
+    grep -Fqx "x-scheme-handler/clashmeta=flclash-url-handler.desktop;" .config/mimeapps.list &&
+    grep -Fqx "x-scheme-handler/flclash=flclash-url-handler.desktop;" .config/mimeapps.list &&
     grep -Fqx "x-scheme-handler/mihomo=flclash.desktop;" .config/mimeapps.list
 '
 
